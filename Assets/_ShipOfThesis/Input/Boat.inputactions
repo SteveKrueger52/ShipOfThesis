@@ -6,11 +6,35 @@
             "id": "7b783c66-aa70-4ed1-aa19-5c89d1caf90a",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "ToggleHalyard",
                     "type": "Button",
                     "id": "9b54990d-397d-4349-b823-07b237c52f67",
                     "expectedControlType": "Button",
                     "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "GetSteering",
+                    "type": "PassThrough",
+                    "id": "bc70dece-6b24-44c1-b3aa-4dfd22550817",
+                    "expectedControlType": "Vector2",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
+                },
+                {
+                    "name": "GetCameraY",
+                    "type": "PassThrough",
+                    "id": "645a995f-7960-4c32-af85-3562487bb936",
+                    "expectedControlType": "Axis",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
+                },
+                {
+                    "name": "GetCameraX",
+                    "type": "PassThrough",
+                    "id": "e391bb19-d2ed-43e0-89c6-137fc7ef45a2",
+                    "expectedControlType": "Axis",
+                    "processors": "AxisDeadzone",
                     "interactions": ""
                 }
             ],
@@ -22,7 +46,62 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "ToggleHalyard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6645387e-ee97-485a-9808-57732a7eed56",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "GetCameraX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a0f91f8-02d9-49fe-bf93-64281bbb4ac1",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "GetCameraX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4e185cb9-c1c0-4030-a281-b06148b8d7fd",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "GetCameraY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e499ecf7-53d6-4617-a088-bb6656848313",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "GetCameraY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "443a7b89-ec86-4b29-bbf0-e6461ba958d6",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GetSteering",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
