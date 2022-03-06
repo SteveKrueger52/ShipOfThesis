@@ -22,17 +22,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "GetCameraY",
+                    "name": "GetCameraX",
                     "type": "PassThrough",
-                    "id": "645a995f-7960-4c32-af85-3562487bb936",
+                    "id": "e391bb19-d2ed-43e0-89c6-137fc7ef45a2",
                     "expectedControlType": "Axis",
                     "processors": "AxisDeadzone",
                     "interactions": ""
                 },
                 {
-                    "name": "GetCameraX",
+                    "name": "GetCameraY",
                     "type": "PassThrough",
-                    "id": "e391bb19-d2ed-43e0-89c6-137fc7ef45a2",
+                    "id": "645a995f-7960-4c32-af85-3562487bb936",
                     "expectedControlType": "Axis",
                     "processors": "AxisDeadzone",
                     "interactions": ""
@@ -74,6 +74,17 @@
                 },
                 {
                     "name": "",
+                    "id": "443a7b89-ec86-4b29-bbf0-e6461ba958d6",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GetSteering",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4e185cb9-c1c0-4030-a281-b06148b8d7fd",
                     "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
@@ -91,44 +102,6 @@
                     "processors": "",
                     "groups": "MouseAndKey",
                     "action": "GetCameraY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "443a7b89-ec86-4b29-bbf0-e6461ba958d6",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GetSteering",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Moderate",
-            "id": "3eb165b8-fc76-4a86-bd8d-a39698a809f0",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "bd30671b-cc5e-460b-b2bc-620414d43b1b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "9e597810-065d-4e8d-a953-e2ec80cbde0c",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
