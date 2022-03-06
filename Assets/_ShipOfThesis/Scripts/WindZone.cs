@@ -10,22 +10,23 @@ public class WindZone : MonoBehaviour
         void ExitWind(WindZone wind);
     }
     
-    private Vector3 _windVector;
+    [SerializeField]
+    private Vector3 windVector;
     public Vector3 WindVector
     {
-        get { return _windVector; }
-        private set { _windVector = value; }
+        get { return windVector; }
+        private set { windVector = value; }
     }
     
     public Vector3 WindDirection
     {
-        get { return _windVector.normalized; }
+        get { return windVector.normalized; }
         private set { WindVector = value.normalized * WindSpeed; }
     }
     
     public float WindSpeed
     {
-        get { return _windVector.magnitude; }
+        get { return windVector.magnitude; }
         private set { WindVector = WindDirection * value; }
     }
     
