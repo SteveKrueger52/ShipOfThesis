@@ -169,6 +169,8 @@ GameObject:
   - component: {fileID: 932980575903570181}
   - component: {fileID: 2066962263141538721}
   - component: {fileID: 309068537}
+  - component: {fileID: 8385205356164624891}
+  - component: {fileID: 309068538}
   m_Layer: 0
   m_Name: Boat Rig
   m_TagString: Untagged
@@ -315,6 +317,261 @@ MonoBehaviour:
   - {fileID: 1715372777}
   - {fileID: 2076034323}
   - {fileID: 1116941971}
+--- !u!114 &8385205356164624891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14624835638355031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1efe38a2d70270b45b2430280d9c8e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 15
+  maxSailDeltaAngle: 0
+  Knots5:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.16701183
+      value: 0
+      inSlope: 0
+      outSlope: 132.00313
+      tangentMode: 1
+      weightedMode: 2
+      inWeight: 0.35284558
+      outWeight: 0.019274058
+    - serializedVersion: 3
+      time: 0.17054443
+      value: 0.2
+      inSlope: 5.442902
+      outSlope: 15.39835
+      tangentMode: 1
+      weightedMode: 3
+      inWeight: 0.59022856
+      outWeight: 0.048275016
+    - serializedVersion: 3
+      time: 0.425
+      value: 0.6
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.45376372
+      outWeight: 0.31515145
+    - serializedVersion: 3
+      time: 1
+      value: 0.32
+      inSlope: -0.98382753
+      outSlope: -0.98382753
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.075538054
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Knots10:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.16701183
+      value: 0
+      inSlope: 0
+      outSlope: 132.00313
+      tangentMode: 1
+      weightedMode: 2
+      inWeight: 0.35284558
+      outWeight: 0.019274058
+    - serializedVersion: 3
+      time: 0.17054443
+      value: 0.24513745
+      inSlope: 5.442902
+      outSlope: 27.77338
+      tangentMode: 1
+      weightedMode: 3
+      inWeight: 0.59022856
+      outWeight: 0.025883675
+    - serializedVersion: 3
+      time: 0.45
+      value: 0.875
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.58736145
+      outWeight: 0.31515145
+    - serializedVersion: 3
+      time: 1
+      value: 0.625
+      inSlope: -1.2991158
+      outSlope: -1.2991158
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06795233
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Knots20:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.16701183
+      value: 0
+      inSlope: 0
+      outSlope: 132.00313
+      tangentMode: 1
+      weightedMode: 2
+      inWeight: 0.35284558
+      outWeight: 0.019274058
+    - serializedVersion: 3
+      time: 0.17054443
+      value: 0.2427876
+      inSlope: 5.442902
+      outSlope: 24.37118
+      tangentMode: 1
+      weightedMode: 3
+      inWeight: 0.59022856
+      outWeight: 0.031153327
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.45376372
+      outWeight: 0.31515145
+    - serializedVersion: 3
+      time: 1
+      value: 0.9375
+      inSlope: -0.31271127
+      outSlope: -0.31271127
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04242432
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  OptimalSailAngle:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.273585
+      outSlope: 1.273585
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.059031777
+    - serializedVersion: 3
+      time: 0.7528901
+      value: 0.85090286
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1.0377339
+      outSlope: 1.0377339
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18394497
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  SailAngleFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &309068538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14624835638355031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5c39a1a364d3b4f12bfe430f5817a350,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Simple
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &932980575937955712
 GameObject:
   m_ObjectHideFlags: 0
