@@ -33,7 +33,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     // Used to approximate the best sail angle at a given point of sail, for wind effect drop off
     // Saoud, Hadi & Hua, Minh-Duc & Plumet, Frederic & Amar, Faïz. (2015). Optimal sail angle computation for an
     // autonomous sailboat robot. 10.1109/CDC.2015.7402329. 
-    public AnimationCurve OptimalSailAngle; // From Apparent Wind angle
+    public AnimationCurve OptimalSailAngle; // From Apparent Wind angle 
     
     public AnimationCurve SailAngleFalloff; // The decay of effectiveness as sail angle leaves the optimal angle. 
     
@@ -69,20 +69,45 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         rb = GetComponent<Rigidbody>();
     }
 
+    // TODO collapse into readable helper functions
     private void FixedUpdate()
     {
         // Determine Constants for frame
         Vector2 flatVelocity = rb.velocity.ProjectOntoPlane(Vector3.up);
         Vector2 trueWind = AverageWind().ProjectOntoPlane(Vector3.up);
         Vector2 apparentWind = trueWind - flatVelocity;
-        Vector2 header = transform.forward.ProjectOntoPlane(Vector3.up);
+        Vector2 heading = transform.forward.ProjectOntoPlane(Vector3.up);
 
-        float windAngle = Vector2.SignedAngle(-header, apparentWind);
+        float windAngle = Vector2.SignedAngle(-heading, apparentWind);
+        float optimalHeading = InverseCurve(OptimalSailAngle, Mathf.InverseLerp(0, 180, Mathf.Abs(windAngle))); 
+        optimalHeading = optimalHeading * (windAngle / Mathf.Abs(windAngle));
+        
+        // TODO Update mainsheet maximum reach (seek to OptimalSailAngle (heading) if control type is simple)
 
         // Seek Sail to Apparent Wind Heading
         float deltaAngle = sailAngle - windAngle;
         float newAngle = SeekEase(sailAngle, windAngle, maxSailAngleSpeed, SailOuterEaseThreshold,
             SailInnerEaseThreshold);
+        
+        // TODO Clamp sail to current max allowed by mainsheet
+        
+        // Determine max speed from wind angle and 'optimal' heading angle - lerp by wind speed across curves
+        float knots = trueWind.magnitude * mpsToKnots;
+        float headingFromWind = Vector2.Angle(-heading, trueWind)/180;
+        float frameSpeed;
+        
+        if (knots <= 5) 
+            frameSpeed = Mathf.Lerp(0, Knots5.Evaluate(headingFromWind), knots / 5);
+        if (5 < knots && knots <= 10)
+            frameSpeed = Mathf.Lerp(Knots5.Evaluate(headingFromWind), Knots10.Evaluate(headingFromWind), (knots - 5) / 5);
+        if (10 < knots)
+            frameSpeed = Mathf.Lerp(Knots10.Evaluate(headingFromWind), Knots20.Evaluate(headingFromWind), (knots - 10) / 10);
+
+        // TODO Adjust for falloff based on difference between true and optimal heading
+
+        // TODO set boat velocity if lower than above result, decay if higher.
+
+        // TODO optional - Determine skid angle so velocity isn't aligned with heading
     }
     
     #endregion
@@ -111,6 +136,35 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         if (Mathf.Abs(delta) > outerThresh) return origin + toMove;
         if (Mathf.Abs(delta) > innerThresh) return origin + (toMove * (delta / outerThresh));
         return target;
+    }
+
+    private float InverseCurve(AnimationCurve curve, float target, int iterations = 10)
+    {
+        Keyframe startFrame = curve[0];
+        Keyframe endFrame = curve[curve.length - 1];
+        
+        // Is curve positive or negative over time
+        bool positive = startFrame.value < endFrame.value;
+        
+        // If target exists outside bounds of curve, clamp to curve
+        if ((target > startFrame.value && !positive) || (target < startFrame.value &&  positive)) return startFrame.time;
+        if ((target > endFrame.value   &&  positive) || (target < endFrame.value   && !positive)) return endFrame.time;
+        
+        // Binary search by midpoint along time axis
+        float lower = startFrame.time;
+        float upper = endFrame.time;
+        float mid,midVal;
+        for (int i = 0; i < iterations; i++)
+        {
+            mid = upper + lower / 2;
+            midVal = curve.Evaluate(mid);
+            if      ((midVal > target && !positive) || (midVal < target &&  positive)) lower = mid; // Target in upper half
+            else if ((midVal > target && positive)  || (midVal < target && !positive))  upper = mid; // Target in lower half
+            else return midVal; // Goldilocks. Target is exactly midVal
+        }
+        
+        // Out of iterations, return closest midpoint (with 10 iterations, accuracy is within 0.05%)
+        return upper + lower / 2;
     }
 
     #endregion
