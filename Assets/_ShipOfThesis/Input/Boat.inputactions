@@ -128,7 +128,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "GetMainsail",
+                    "name": "GetMainsheet",
                     "type": "PassThrough",
                     "id": "2a0c6807-9531-4d56-b868-646c9e43d490",
                     "expectedControlType": "Axis",
@@ -292,7 +292,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -303,7 +303,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "MouseAndKey",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -314,7 +314,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "MouseAndKey",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -336,7 +336,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -347,7 +347,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "MouseAndKey",
-                    "action": "GetMainsail",
+                    "action": "GetMainsheet",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

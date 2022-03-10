@@ -2,20 +2,51 @@
 using System.Collections.Generic;
 using Cinemachine.Utility;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Sailboat : MonoBehaviour , WindZone.IWindObject
 {
+    public class SeekEasingValues
+    {
+        public float MaxDelta
+        {
+            get => easingValues.x;
+            set => easingValues = new Vector3(value, easingValues.y, easingValues.z);
+        }
+        public float InnerThresh
+        {
+            get => easingValues.y;
+            set => easingValues = new Vector3(easingValues.x, easingValues.y, easingValues.z);
+        }
+        public float OuterThresh
+        {
+            get => easingValues.z;
+            set => easingValues = new Vector3(easingValues.x, easingValues.y, easingValues.z);
+        }
+        private Vector3 easingValues;
+    }
+    
     #region Public Members
     
-    public bool SimpleControls { get; private set; }
+    public bool SimpleControls { get; set; }
   
     [Header("Physics Constraints")]
     public float maxSpeed;
+    [Space] 
 
-    public float maxSailAngleSpeed;
-    public float SailOuterEaseThreshold;
-    public float SailInnerEaseThreshold;
+    public float sailRotateSpeed;
+    public float sailOuterEaseThreshold;
+    public float sailInnerEaseThreshold;
+    [Space] 
+    public float mainsheetRotateSpeed;
+    public float mainsheetOuterEaseThreshold;
+    public float mainsheetInnerEaseThreshold;
+    [Space] 
+    public float headingRotateSpeed;
+    public float headingOuterEaseThreshold;
+    public float headingInnerEaseThreshold;
+    [Space] 
 
     [Header("Sailing Curves")]
     // All Animation Curves are in the range of X,Y = [0,1].
@@ -41,9 +72,6 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     // Assume the angle of attack (between apparent wind and sail) is optimal.
     // Find the optimal boat heading for that angle of attack (inverse of OptimalSailAngle)
     // Determine the boat's optimal speed for the faux heading, and apply falloff based on the angle difference.
-
-    
-    
     
     #endregion
 
@@ -52,21 +80,30 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private float mpsToKnots = 1.94384f; // Meters per second to knots
     private List<WindZone> windZones;
     private Rigidbody rb;
+    private Animator anim;
 
+    // Input Members
+    private bool HalyardToggleUp;
+    private float halyardDelta;
+    private float mainsheetDelta;
+    private Vector2 steerTarget;
+    private float rudderTarget;
+    
+    // Animation & Physics Values
     private float sailHeight;
     private float sailAngle;
     private float rudderAngle;
 
+    private float mainsheetMaxAngle;
+    private float mainsheetSeekTarget;
+
     #endregion
-
-    #region Interface Methods
     
-    public void EnterWind(WindZone wind) { windZones.Add(wind); }
-    public void ExitWind(WindZone wind) { windZones.Remove(wind); }
-
-    private void Awake()
+    
+     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     // TODO collapse into readable helper functions
@@ -83,11 +120,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         optimalHeading = optimalHeading * (windAngle / Mathf.Abs(windAngle));
         
         // TODO Update mainsheet maximum reach (seek to OptimalSailAngle (heading) if control type is simple)
+        if (SimpleControls)
+        {
+            mainsheetSeekTarget = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle));
+        }
 
         // Seek Sail to Apparent Wind Heading
         float deltaAngle = sailAngle - windAngle;
-        float newAngle = SeekEase(sailAngle, windAngle, maxSailAngleSpeed, SailOuterEaseThreshold,
-            SailInnerEaseThreshold);
+        float newAngle = SeekEase(sailAngle, windAngle, sailRotateSpeed, sailOuterEaseThreshold,
+            sailInnerEaseThreshold);
         
         // TODO Clamp sail to current max allowed by mainsheet
         
@@ -110,13 +151,73 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         // TODO optional - Determine skid angle so velocity isn't aligned with heading
     }
     
+
+    #region Interface Methods
+    
+    public void EnterWind(WindZone wind) { windZones.Add(wind); }
+    public void ExitWind(WindZone wind) { windZones.Remove(wind); }
+    
     #endregion
     
     #region Input Management
     
+    public void OnToggleHalyard()
+    {
+        HalyardToggleUp = !HalyardToggleUp;
+    }
+    
+    public void OnGetHalyard(InputValue value)
+    {
+        halyardDelta = value.Get<float>();
+    }
+
+    public void OnGetSteering(InputValue value)
+    {
+        // TODO Relative to camera
+        steerTarget = value.Get<Vector2>();
+    }
+    
+    public void OnGetRudder(InputValue value)
+    {
+        rudderTarget = value.Get<float>();
+    }
+    
+    public void OnGetMainsheet(InputValue value)
+    {
+        mainsheetDelta = value.Get<float>();
+    }
+    
+    public void OnGetCameraX(InputValue value)
+    {
+            
+    }
+    
+    public void OnGetCameraY(InputValue value)
+    {
+            
+    }
+    
     #endregion
 
     #region Helper Methods
+
+    private void UpdateAnimation()
+    {
+        anim.SetFloat("SailHeight", sailHeight);
+        anim.SetFloat("SailAngle", sailAngle);
+        anim.SetFloat("RudderAngle", rudderAngle);
+    }
+
+    private void SimpleSteering()
+    {
+        // Halyard Toggle
+        if (HalyardToggleUp && !Mathf.Approximately(sailHeight, 1f)) SeekEase(sailHeight,1f,)
+    }
+
+    private void ComplexSteering()
+    {
+        
+    }
 
     private Vector3 AverageWind ()
     {
