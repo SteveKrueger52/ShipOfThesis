@@ -36,16 +36,35 @@
                     "expectedControlType": "Axis",
                     "processors": "AxisDeadzone",
                     "interactions": ""
+                },
+                {
+                    "name": "SwapControls",
+                    "type": "Button",
+                    "id": "5925635f-f8ec-4fe1-afc1-90d6200a1c3d",
+                    "expectedControlType": "Button",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "6e2cf649-03b8-4d89-9ead-54e971890b7b",
-                    "path": "",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "MouseAndKey",
+                    "action": "ToggleHalyard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5030cd42-1ef7-44da-a9f2-0dd4b70fa73a",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "ToggleHalyard",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -75,13 +94,68 @@
                 {
                     "name": "",
                     "id": "443a7b89-ec86-4b29-bbf0-e6461ba958d6",
-                    "path": "",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "GetSteering",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Keyboard",
+                    "id": "f3048b40-681e-41c9-a7a3-1d0fe1f3f2f0",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GetSteering",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4c9cc861-fbea-43ae-b031-b3aa8d5a653b",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "GetSteering",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "d82cff6e-61ab-40be-b17a-351c3a4a79c5",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "GetSteering",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "bee41fa5-a303-4e55-9d43-43b8f528543c",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "GetSteering",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "c1f4539b-28f3-4f32-bc51-fc0be07b39e8",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "GetSteering",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -102,6 +176,17 @@
                     "processors": "",
                     "groups": "MouseAndKey",
                     "action": "GetCameraY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8900f69-6a12-4267-a935-e317af748ffb",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "SwapControls",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -148,6 +233,14 @@
                     "type": "PassThrough",
                     "id": "6d1eb201-3f83-464f-951f-0a6fec1c5389",
                     "expectedControlType": "Axis",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
+                },
+                {
+                    "name": "SwapControls",
+                    "type": "Button",
+                    "id": "748225f6-f8ac-4b7b-b879-ddd9836c07b9",
+                    "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
                 }
@@ -392,6 +485,17 @@
                     "processors": "",
                     "groups": "MouseAndKey",
                     "action": "GetCameraY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5840996c-95e7-4faa-9b8b-ffb56fa4307a",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "SwapControls",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
