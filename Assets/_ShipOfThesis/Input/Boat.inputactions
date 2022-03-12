@@ -44,6 +44,14 @@
                     "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
+                },
+                {
+                    "name": "DebugInfo",
+                    "type": "Button",
+                    "id": "a8aa4d2e-9081-4510-a104-b85282229d20",
+                    "expectedControlType": "Button",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -189,6 +197,17 @@
                     "action": "SwapControls",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37e9a7a2-579f-43bc-8710-2d1c360d3667",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "DebugInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -240,6 +259,14 @@
                     "name": "SwapControls",
                     "type": "Button",
                     "id": "748225f6-f8ac-4b7b-b879-ddd9836c07b9",
+                    "expectedControlType": "Button",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
+                },
+                {
+                    "name": "DebugInfo",
+                    "type": "Button",
+                    "id": "c62cb1d3-9759-419d-ba4a-da2f4eba0269",
                     "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
@@ -496,6 +523,17 @@
                     "processors": "",
                     "groups": "MouseAndKey",
                     "action": "SwapControls",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3c8cf22-ae8b-495a-827e-65c6ea0d7fa7",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "DebugInfo",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

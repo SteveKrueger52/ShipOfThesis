@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cinemachine.Utility;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
 
 public class Sailboat : MonoBehaviour , WindZone.IWindObject
@@ -28,11 +29,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     [Header("Physics Constraints")]
     public float maxSpeed;
+    public float decayRate;
+    public float rudderImpulse;
+    public float boatRotateSpeed;
+    public float sailRotateSpeed; // tuned for 10 knots, full sail. Scales accordingly.
+    public float mainsailMinimum;
 
     [Space]
 
     public SeekEasingValues HalyardEasings;
-    public SeekEasingValues SailEasings;
     public SeekEasingValues HeadingEasings;
     public SeekEasingValues MainsheetEasings;
     
@@ -56,12 +61,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     // autonomous sailboat robot. 10.1109/CDC.2015.7402329. 
     public AnimationCurve OptimalSailAngle; // From Apparent Wind angle 
     
-    public AnimationCurve SailAngleFalloff; // The decay of effectiveness as sail angle leaves the optimal angle. 
-    
-    // For a boat with an inoptimal trim, their speed will be determined by the following method:
-    // Assume the angle of attack (between apparent wind and sail) is optimal.
-    // Find the optimal boat heading for that angle of attack (inverse of OptimalSailAngle)
-    // Determine the boat's optimal speed for the faux heading, and apply falloff based on the angle difference.
+    public AnimationCurve SailAngleFalloff; // The decay of effectiveness as sail angle leaves the optimal angle.
     
     #endregion
 
@@ -88,8 +88,8 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private float sailAngle;
     private float sailAngleLocalMax;
     private float rudderAngle;
-    
-    //private float mainsheetSeekTarget;
+    private float sailEffect;
+    private float lastRudderAngle;
 
     #endregion
     
@@ -108,53 +108,69 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
      private void Update()
      {
-         if (SimpleControls) SimpleSteering();
+         // Apparent Wind
+         Vector3 apparentWind = currentWind - rb.velocity;
+         float windAngle = Vector3.SignedAngle(transform.right,apparentWind, Vector3.up); // transform.right is the stern of the boat
+         
+         
+         // Get Steering - Sail height, Rudder angle, and Mainsheet max (from centerline)
+         if (SimpleControls) 
+             SimpleSteering(Mathf.Abs(windAngle));
          else ComplexSteering();
+         
+         // Move sail toward wind angle - constrained by mainsheet
+         sailAngle = Mathf.MoveTowardsAngle(sailAngle * 90, windAngle, Time.deltaTime * sailRotateSpeed * sailHeight * (currentWind.magnitude / 10)) / 90; 
+         sailAngle = Mathf.Abs(sailAngle) > sailAngleLocalMax ? sailAngleLocalMax * Mathf.Sign(sailAngle) : sailAngle;
+
+         // Update Animations
+         UpdateAnimation();
      }
 
      // TODO collapse into readable helper functions
     private void FixedUpdate()
     {
-       //  // Determine Constants for frame
-       //  Vector2 flatVelocity = rb.velocity.ProjectOntoPlane(Vector3.up);
-       //  Vector2 trueWind = AverageWind().ProjectOntoPlane(Vector3.up);
-       //  Vector2 apparentWind = trueWind - flatVelocity;
-       //  Vector2 heading = transform.forward.ProjectOntoPlane(Vector3.up);
-       //
-       //  float windAngle = Vector2.SignedAngle(-heading, apparentWind);
-       //  float optimalHeading = InverseCurve(OptimalSailAngle, Mathf.InverseLerp(0, 180, Mathf.Abs(windAngle))); 
-       //  optimalHeading = optimalHeading * (windAngle / Mathf.Abs(windAngle));
-       //  
-       //  // TODO Update mainsheet maximum reach (seek to OptimalSailAngle (heading) if control type is simple)
-       //  if (SimpleControls)
-       //  {
-       //      //mainsheetSeekTarget = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle));
-       //  }
-       //
-       //  // Seek Sail to Apparent Wind Heading
-       //  float deltaAngle = sailAngle - windAngle;
-       // // float newAngle = SeekEase(sailAngle, windAngle, sailRotateSpeed, sailOuterEaseThreshold,
-       //   //   sailInnerEaseThreshold);
-       //  
-       //  // TODO Clamp sail to current max allowed by mainsheet
-       //  
-       //  // Determine max speed from wind angle and 'optimal' heading angle - lerp by wind speed across curves
-       //  float knots = trueWind.magnitude * mpsToKnots;
-       //  float headingFromWind = Vector2.Angle(-heading, trueWind)/180;
-       //  float frameSpeed;
-       //  
-       //  if (knots <= 5) 
-       //      frameSpeed = Mathf.Lerp(0, Knots5.Evaluate(headingFromWind), knots / 5);
-       //  if (5 < knots && knots <= 10)
-       //      frameSpeed = Mathf.Lerp(Knots5.Evaluate(headingFromWind), Knots10.Evaluate(headingFromWind), (knots - 5) / 5);
-       //  if (10 < knots)
-       //      frameSpeed = Mathf.Lerp(Knots10.Evaluate(headingFromWind), Knots20.Evaluate(headingFromWind), (knots - 10) / 10);
-       //
-       //  // TODO Adjust for falloff based on difference between true and optimal heading
-       //
-       //  // TODO set boat velocity if lower than above result, decay if higher.
-       //
-       //  // TODO optional - Determine skid angle so velocity isn't aligned with heading
+       // Determine Constants for frame
+       Vector3 flatVelocity = rb.velocity.ProjectOntoPlane(Vector3.up);
+       Vector3 trueWind = currentWind.ProjectOntoPlane(Vector3.up);
+       Vector3 apparentWind = trueWind - flatVelocity;
+       Vector3 heading = -transform.right.ProjectOntoPlane(Vector3.up); // -transform.right is the bow of the boat
+
+       float windAngle = Vector3.SignedAngle(-heading, apparentWind, Vector3.up);
+       float optimalAngle = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle) / 180f) * -Mathf.Sign(windAngle) * 90f;
+       
+       // Determine max speed from wind angle and 'optimal' heading angle - lerp by wind speed across curves
+       float knots = trueWind.magnitude;
+       float headingFromWind = Vector3.Angle(-heading, trueWind)/180;
+       float frameSpeed;
+       
+       if (knots <= 5f) 
+           frameSpeed = Mathf.Lerp(0f, Knots5.Evaluate(headingFromWind), knots / 5f);
+       else if (5f < knots && knots <= 10f)
+           frameSpeed = Mathf.Lerp(Knots5.Evaluate(headingFromWind), Knots10.Evaluate(headingFromWind), (knots - 5f) / 5f);
+       else if (10f < knots && knots < 20f)
+           frameSpeed = Mathf.Lerp(Knots10.Evaluate(headingFromWind), Knots20.Evaluate(headingFromWind), (knots - 10f) / 10f);
+       else frameSpeed = Knots20.Evaluate(headingFromWind);
+
+       
+       // TODO Adjust for falloff based on difference between true and optimal heading
+       float reflected = ReflectAngle(windAngle, sailAngle * 90);
+       float degreesFromOptimal = optimalAngle - 
+           (Mathf.DeltaAngle(sailAngle * 90, optimalAngle) > Mathf.DeltaAngle(reflected, optimalAngle)
+           ? reflected : (sailAngle * 90f));
+       
+       
+       Debug.Log("SailAngle: " + (sailAngle * 90f) + " | Optimal: " + optimalAngle * Mathf.Sign(windAngle) + " | Degrees From Optimal: " + degreesFromOptimal);
+           
+           // "Velocity: " + rb.velocity.ProjectOntoPlane(Vector3.up).magnitude + "  | Wind Angle: " + windAngle + " | Effect : " + sailEffect + " | Frame Speed: " + frameSpeed + " | 
+           
+       // // Rudder Impulse
+       // if (!Mathf.Approximately(rudderAngle, lastRudderAngle))
+       //     rb.AddForce(-transform.right * rudderImpulse, ForceMode.Impulse);
+       // lastRudderAngle = rudderAngle;
+
+       // TODO set boat velocity if lower than above result, decay if higher.
+
+       // TODO optional - Determine skid angle so velocity isn't aligned with heading
     }
     
 
@@ -180,7 +196,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     
     public void OnToggleHalyard()
     {
-        // Debug.Log("Toggle Halyard");
+        //Debug.Log("Toggle Halyard");
         halyardToggleUp = !halyardToggleUp;
     }
     
@@ -189,6 +205,8 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         
         // Debug.Log("Move Halyard");
         halyardDelta = value.Get<float>();
+        //Debug.Log("Halyard Delta: " + halyardDelta);
+
     }
 
     public void OnGetSteering(InputValue value)
@@ -197,18 +215,23 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         var inputSteering = value.Get<Vector2>();
         steerTarget = (mainCam.transform.right * inputSteering.x + mainCam.transform.forward * inputSteering.y)
             .ProjectOntoPlane(Vector3.up).normalized;
+        //Debug.Log("Steering: " + steerTarget);
+
     }
     
     public void OnGetRudder(InputValue value)
     {
         // Debug.Log("Move Rudder");
         rudderInput = value.Get<float>();
+        //Debug.Log("Rudder Input: " + rudderInput);
+
     }
     
     public void OnGetMainsheet(InputValue value)
     {
         // Debug.Log("Move Mainsheet");
         sailAngleDelta = value.Get<float>();
+        //Debug.Log("Mainsheet Input: " + sailAngleDelta);
     }
     
     public void OnGetCameraX(InputValue value)
@@ -225,7 +248,13 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         SimpleControls = !simpleControls;
     }
-    
+
+    public void OnDebugInfo()
+    {
+        Debug.Log("Sail Angle: " + sailAngle + " | Rudder Angle: " + rudderAngle + " | Mainsail Height: " + sailHeight + "\n" +
+                  "Simple: " + simpleControls + " | HalyardToggle: " + halyardToggleUp + " | Mainsheet: " + sailAngleLocalMax);
+    }
+
     #endregion
 
     #region Helper Methods
@@ -233,17 +262,28 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private void UpdateAnimation()
     {
         anim.SetFloat("SailHeight", sailHeight);
-        anim.SetFloat("SailAngle", sailAngle);
-        anim.SetFloat("RudderAngle", rudderAngle);
+        anim.SetFloat("SailAngle", sailAngle/2 + 0.5f);
+        anim.SetFloat("RudderAngle", rudderAngle/2 + 0.5f);
+        anim.SetFloat("SailEffect", sailEffect);
     }
 
-    private void SimpleSteering()
+    private void SimpleSteering(float windAngle)
     {
         // Halyard Toggle
         if ( halyardToggleUp && !Mathf.Approximately(sailHeight, 1f)) SeekEase(sailHeight, 1f, HalyardEasings);
         if (!halyardToggleUp && !Mathf.Approximately(sailHeight, 0f)) SeekEase(sailHeight, 0f, HalyardEasings);
         
-        // TODO Rudder from Target Heading
+        // Rudder from Target Heading
+        float angleToTarget = Vector3.SignedAngle(-transform.right, steerTarget, Vector3.up); // -transform.right is the bow of the boat
+        if (steerTarget != Vector3.zero && !Mathf.Approximately(0f, angleToTarget))
+        {
+            float effort;
+            SeekEase(0f, angleToTarget, HeadingEasings, out effort);
+            rudderAngle = effort * Mathf.Sign(angleToTarget);
+        }
+        
+        // Mainsheet from optimal angle for current heading
+        sailAngleLocalMax = Mathf.Max(mainsailMinimum,OptimalSailAngle.Evaluate(windAngle / 180f));
     }
 
     private void ComplexSteering()
@@ -255,7 +295,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         rudderAngle = rudderInput;
         
         // Mainsheet - delta control
-        sailAngleLocalMax = Mathf.Clamp(sailAngleLocalMax + (sailAngleDelta * Time.deltaTime * MainsheetEasings.MaxDelta),-1f,1f);
+        sailAngleLocalMax = Mathf.Clamp(sailAngleLocalMax + (sailAngleDelta * Time.deltaTime * MainsheetEasings.MaxDelta),mainsailMinimum,1f);
     }
 
     private Vector3 AverageWind ()
@@ -265,9 +305,17 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         Vector3 acc = Vector3.zero;
         foreach (WindZone w in windZones)
             acc += w.WindVector;
-        return  transform.worldToLocalMatrix * (acc / windZones.Count);
+        //Debug.Log("Wind Zones: " + windZones.Count + " | avg: " + (acc/windZones.Count));
+        return  acc / windZones.Count;
     }
 
+    private float ReflectAngle(float normal, float incident)
+    {
+        float result =  -(incident - normal) + normal;
+        return (result > 180 || result <= -180) ? (result - 180f % 360f) + 180f : result;
+    } 
+    
+    
     private float SeekEase(float origin, float target, SeekEasingValues easings)
     {
         return SeekEase(origin, target, easings.MaxDelta, easings.OuterThresh, easings.InnerThresh, out _);
@@ -295,12 +343,14 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         effort = 0f;
         return target;
     }
-   
 
     private float InverseCurve(AnimationCurve curve, float target, int iterations = 10)
     {
+        
         Keyframe startFrame = curve[0];
         Keyframe endFrame = curve[curve.length - 1];
+        
+        // Debug.Log(startFrame.value + " | " + target + " | " + endFrame.value);
         
         // Is curve positive or negative over time
         bool positive = startFrame.value < endFrame.value;
@@ -332,10 +382,30 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     private void OnDrawGizmos()
     {
+        Vector3 flatVelocity = rb != null ? rb.velocity.ProjectOntoPlane(Vector3.up) : Vector3.zero;
+        Vector3 trueWind = currentWind.ProjectOntoPlane(Vector3.up);
+        Vector3 apparentWind = trueWind - flatVelocity;
+        Vector3 heading = -transform.right.ProjectOntoPlane(Vector3.up); // -transform.right is the bow of the boat
+
+        float windAngle = Vector3.SignedAngle(-heading, apparentWind, Vector3.up);
+        float optimalAngle = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle) / 180f) * Mathf.Sign(windAngle) * 90f;
+        
         Vector3 origin = transform.position;
         // Wind Angle
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(origin, origin + currentWind.normalized * 5);
+        
+        // Optimal Sail Angle
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(optimalAngle, Vector3.up) * transform.right) * 5);
+        
+        // Sail and Reflection
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(sailAngle * 90, Vector3.up) * transform.right) * 5);
+
+        float reflected = ReflectAngle(windAngle, sailAngle * 90f);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(reflected, Vector3.up) * transform.right) * 5);
         
         // Simple Controls - Target Heading
         if (simpleControls)
