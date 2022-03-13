@@ -58,7 +58,7 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: SailEffect
     m_EventTreshold: 0.1
-  - m_ConditionMode: 4
+  - m_ConditionMode: 3
     m_ConditionEvent: SailAngle
     m_EventTreshold: 0.5
   m_DstStateMachine: {fileID: 0}
@@ -562,7 +562,7 @@ BlendTree:
   m_Name: RudderPosition
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 4b6a4c72166826746a788c450d67013d, type: 2}
+    m_Motion: {fileID: 7400000, guid: 58a53bbbc61e78c43aa510c30107452c, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -578,7 +578,7 @@ BlendTree:
     m_DirectBlendParameter: SailHeight
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 58a53bbbc61e78c43aa510c30107452c, type: 2}
+    m_Motion: {fileID: 7400000, guid: 4b6a4c72166826746a788c450d67013d, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -745,7 +745,7 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 4
+  - m_ConditionMode: 3
     m_ConditionEvent: SailAngle
     m_EventTreshold: 0.5
   - m_ConditionMode: 3
@@ -773,7 +773,7 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 4
+  - m_ConditionMode: 3
     m_ConditionEvent: SailEffect
     m_EventTreshold: 0.1
   - m_ConditionMode: 4
@@ -804,7 +804,7 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: SailEffect
     m_EventTreshold: 0.1
-  - m_ConditionMode: 3
+  - m_ConditionMode: 4
     m_ConditionEvent: SailAngle
     m_EventTreshold: 0.5
   m_DstStateMachine: {fileID: 0}
