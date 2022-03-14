@@ -127,7 +127,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-422076
+  m_Name: pb_Mesh-1470
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -365,7 +365,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-422096
+  m_Name: pb_Mesh-1490
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -604,7 +604,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-422100
+  m_Name: pb_Mesh-1494
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -876,6 +876,11 @@ PrefabInstance:
     - target: {fileID: 932980575903570186, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 932980575903570186, guid: 1d5ee85ccf80f46738309ace7a3f823a,
+        type: 3}
+      propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 932980577001428384, guid: 1d5ee85ccf80f46738309ace7a3f823a,
@@ -11131,17 +11136,17 @@ PrefabInstance:
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: HalyardEasings.MaxDelta
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: HalyardEasings.InnerThresh
-      value: 1
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: HalyardEasings.OuterThresh
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
@@ -11151,12 +11156,12 @@ PrefabInstance:
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: HeadingEasings.InnerThresh
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
       propertyPath: HeadingEasings.OuterThresh
-      value: 1
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8385205356164624891, guid: 1d5ee85ccf80f46738309ace7a3f823a,
         type: 3}
@@ -11876,17 +11881,17 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   colorGradientTexture: {fileID: 0}
   shallowColor: {r: 0, g: 0.7725491, b: 0.62352943, a: 0.5019608}
-  deepColor: {r: 0.01176471, g: 0.28610688, b: 0.50980073, a: 1}
+  deepColor: {r: 0.01176471, g: 0.28610492, b: 0.50980073, a: 1}
   colorDepth: 0.8
-  horizonColor: {r: 0, g: 0.22728339, b: 0.8, a: 1}
+  horizonColor: {r: 0, g: 0.22728142, b: 0.8, a: 1}
   horizonDistance: 20
   shoreFade: 1
-  shoreColor: {r: 0, g: 0.98039216, b: 0.3017932, a: 0}
+  shoreColor: {r: 0, g: 0.98039216, b: 0.3017912, a: 0}
   shoreStrength: 0
   shoreBlend: 1
   shoreDepth: 0.74
   waveColor: {r: 0, g: 0, b: 0, a: 0}
-  underwaterColor: {r: 0.20376271, g: 0.3096363, b: 0.517647, a: 0}
+  underwaterColor: {r: 0.20376083, g: 0.3096343, b: 0.517647, a: 0}
   underwaterColorStrength: 0
   underwaterRefractionStrength: 0.099
   surfaceFoamTexture: {fileID: 2800000, guid: d3b0d77dfe711a04c8ff18ecc260aa66, type: 3}

@@ -181,10 +181,6 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
        if (!Mathf.Approximately(rudderAngle, lastRudderAngle))
            rb.AddForce(-transform.right * rudderImpulse, ForceMode.Acceleration);
        lastRudderAngle = rudderAngle;
-       
-       Debug.Log(sailEffect + " | " + effect + " | " + frameSpeed + " || " + effectAngle + " | " + Mathf.Min(degreesFromOptimal, reflectedFromOptimal) + " | " + windAngle);
-
-       // TODO optional - Determine skid angle so velocity isn't aligned with heading
     }
     
 
@@ -284,8 +280,11 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private void SimpleSteering(float windAngle)
     {
         // Halyard Toggle
-        if ( halyardToggleUp && !Mathf.Approximately(sailHeight, 1f)) SeekEase(sailHeight, 1f, HalyardEasings);
-        if (!halyardToggleUp && !Mathf.Approximately(sailHeight, 0f)) SeekEase(sailHeight, 0f, HalyardEasings);
+        float debug = 0f;
+        if ( halyardToggleUp && !Mathf.Approximately(sailHeight, 1f)) 
+            sailHeight = SeekEase(sailHeight, 1f, HalyardEasings, out debug);
+        if (!halyardToggleUp && !Mathf.Approximately(sailHeight, 0f)) 
+            sailHeight = SeekEase(sailHeight, 0f, HalyardEasings, out debug);
         
         // Rudder from Target Heading
         float angleToTarget = Vector3.SignedAngle(-transform.right, steerTarget, Vector3.up); // -transform.right is the bow of the boat
@@ -293,11 +292,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         {
             float effort;
             SeekEase(0f, angleToTarget, HeadingEasings, out effort);
-            rudderAngle = effort * Mathf.Sign(angleToTarget);
+            rudderAngle = -effort;
         }
+        else rudderAngle = 0f;
         
         // Mainsheet from optimal angle for current heading
         sailAngleLocalMax = Mathf.Max(mainsailMinimum,OptimalSailAngle.Evaluate(windAngle / 180f));
+
+        // Debug.Log(debug);
+        Debug.Log(halyardToggleUp + ": " + sailHeight + " | " + angleToTarget + " | " + steerTarget);
     }
 
     private void ComplexSteering()
@@ -348,14 +351,16 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private float SeekEase(float origin, float target, float maxDelta, float outerThresh, float innerThresh, out float effort)
     {
         float delta = target - origin;
-        float toMove = Mathf.Clamp(delta, -maxDelta, maxDelta) * Time.deltaTime;
+        float toMove = maxDelta * Mathf.Sign(delta);
 
-        effort = toMove / Mathf.Abs(toMove);
-        if (Mathf.Abs(delta) > outerThresh) return origin + toMove;
+        effort = Mathf.Sign(toMove);
+        if (Mathf.Abs(delta) > outerThresh) 
+            return origin + toMove * Time.deltaTime;
         if (Mathf.Abs(delta) > innerThresh)
         {
+            //Debug.Log("Slow Down");
             effort *= (Mathf.Abs(delta) / outerThresh);
-            return origin + (toMove * (Mathf.Abs(delta) / outerThresh));
+            return origin + (toMove * (Mathf.Abs(delta) / outerThresh) * Time.deltaTime);
         }
         effort = 0f;
         return target;
