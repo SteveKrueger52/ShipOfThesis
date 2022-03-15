@@ -187,7 +187,7 @@ Transform:
   m_GameObject: {fileID: 14624835638355031}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2385294631409863982}
   - {fileID: 932980575937955713}
@@ -256,7 +256,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 500
   m_Drag: 0.5
-  m_AngularDrag: 0.5
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -309,8 +309,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   water: {fileID: 0}
   strength: 1
-  objectDepth: 1
-  velocityDrag: 0.99
+  objectDepth: 0.8
+  velocityDrag: 0.01
   angularDrag: 0.5
   effectors:
   - {fileID: 284141514}
@@ -329,8 +329,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1efe38a2d70270b45b2430280d9c8e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 15
-  maxSailDeltaAngle: 0
+  maxSpeed: 5
+  decayRate: 0.1
+  rudderImpulse: 5
+  boatRotateSpeed: 0.25
+  sailRotateSpeed: 100
+  mainsailMinimum: 0.05
+  HalyardEasings:
+    MaxDelta: 2
+    InnerThresh: 0.01
+    OuterThresh: 0.5
+  HeadingEasings:
+    MaxDelta: 1
+    InnerThresh: 5
+    OuterThresh: 30
+  MainsheetEasings:
+    MaxDelta: 1
+    InnerThresh: 1
+    OuterThresh: 1
   Knots5:
     serializedVersion: 2
     m_Curve:
@@ -344,23 +360,23 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.16701183
+      time: 0.1
       value: 0
       inSlope: 0
-      outSlope: 132.00313
+      outSlope: 2.7092388
       tangentMode: 1
       weightedMode: 2
       inWeight: 0.35284558
-      outWeight: 0.019274058
+      outWeight: 0.82494736
     - serializedVersion: 3
-      time: 0.17054443
-      value: 0.2
-      inSlope: 5.442902
-      outSlope: 15.39835
-      tangentMode: 1
+      time: 0.15336654
+      value: 0.15189809
+      inSlope: 2.7453747
+      outSlope: 2.7453747
+      tangentMode: 0
       weightedMode: 3
-      inWeight: 0.59022856
-      outWeight: 0.048275016
+      inWeight: 0.49873072
+      outWeight: 0.19438058
     - serializedVersion: 3
       time: 0.425
       value: 0.6
@@ -395,23 +411,23 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.16701183
+      time: 0.1
       value: 0
       inSlope: 0
-      outSlope: 132.00313
+      outSlope: 4.2517376
       tangentMode: 1
       weightedMode: 2
       inWeight: 0.35284558
-      outWeight: 0.019274058
+      outWeight: 0.5297899
     - serializedVersion: 3
-      time: 0.17054443
-      value: 0.24513745
-      inSlope: 5.442902
-      outSlope: 27.77338
-      tangentMode: 1
+      time: 0.16246362
+      value: 0.25339216
+      inSlope: 3.5646725
+      outSlope: 3.5646725
+      tangentMode: 0
       weightedMode: 3
-      inWeight: 0.59022856
-      outWeight: 0.025883675
+      inWeight: 0.49884748
+      outWeight: 0.05479994
     - serializedVersion: 3
       time: 0.45
       value: 0.875
@@ -446,23 +462,23 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.16701183
+      time: 0.1
       value: 0
       inSlope: 0
-      outSlope: 132.00313
+      outSlope: 5.7075477
       tangentMode: 1
       weightedMode: 2
       inWeight: 0.35284558
-      outWeight: 0.019274058
+      outWeight: 0.3866035
     - serializedVersion: 3
-      time: 0.17054443
-      value: 0.2427876
-      inSlope: 5.442902
-      outSlope: 24.37118
-      tangentMode: 1
+      time: 0.15539292
+      value: 0.268731
+      inSlope: 3.630328
+      outSlope: 3.630328
+      tangentMode: 0
       weightedMode: 3
-      inWeight: 0.59022856
-      outWeight: 0.031153327
+      inWeight: 0.5704406
+      outWeight: 0.08327485
     - serializedVersion: 3
       time: 0.5
       value: 1
@@ -490,8 +506,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.273585
-      outSlope: 1.273585
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -523,17 +539,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -1
-      outSlope: -1
-      tangentMode: 34
-      weightedMode: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 2
       inWeight: 0
+      outWeight: 0.5566779
+    - serializedVersion: 3
+      time: 0.9
+      value: 0
+      inSlope: -1.5785271
+      outSlope: 0
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.079685785
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -1
-      outSlope: -1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -7758,9 +7783,63 @@ MonoBehaviour:
   assetGuid: 
   m_Mesh: {fileID: 0}
   m_IsSelectable: 1
-  m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedFaces: 950000000c00000094000000930000000d0000000e0000000f00000011000000
+  m_SelectedEdges:
+  - a: 556
+    b: 557
+  - a: 557
+    b: 555
+  - a: 555
+    b: 558
+  - a: 558
+    b: 556
+  - a: 552
+    b: 553
+  - a: 553
+    b: 554
+  - a: 554
+    b: 552
+  - a: 549
+    b: 550
+  - a: 550
+    b: 548
+  - a: 548
+    b: 551
+  - a: 551
+    b: 549
+  - a: 544
+    b: 545
+  - a: 545
+    b: 546
+  - a: 546
+    b: 547
+  - a: 547
+    b: 544
+  - a: 559
+    b: 560
+  - a: 560
+    b: 561
+  - a: 561
+    b: 559
+  - a: 562
+    b: 563
+  - a: 563
+    b: 564
+  - a: 564
+    b: 562
+  - a: 565
+    b: 566
+  - a: 566
+    b: 567
+  - a: 567
+    b: 565
+  - a: 571
+    b: 572
+  - a: 572
+    b: 573
+  - a: 573
+    b: 571
+  m_SelectedVertices: 2b0200002c0200002d0200002e02000028020000290200002a02000024020000250200002602000027020000200200002102000022020000230200002f02000030020000310200003202000033020000340200003502000036020000370200003b0200003c0200003d020000
 --- !u!1 &3744481176620340659
 GameObject:
   m_ObjectHideFlags: 0

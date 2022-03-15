@@ -52,6 +52,14 @@
                     "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "5b885ed1-c324-4028-99cf-907a513c71fd",
+                    "expectedControlType": "Button",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -208,6 +216,50 @@
                     "action": "DebugInfo",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49274e16-d8ae-496c-ab60-af0b35c32631",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42b5330a-27c5-483e-b7df-4a2f63774fda",
+                    "path": "<DualShockGamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d549c85-618d-4a14-a06a-154aea091b50",
+                    "path": "<SwitchProControllerHID>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6931d79-44a4-42cb-b614-98d5f0778101",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -259,6 +311,14 @@
                     "name": "SwapControls",
                     "type": "Button",
                     "id": "748225f6-f8ac-4b7b-b879-ddd9836c07b9",
+                    "expectedControlType": "Button",
+                    "processors": "AxisDeadzone",
+                    "interactions": ""
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "a89c9807-512b-4921-8ec4-a97a7c173f17",
                     "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
@@ -534,6 +594,50 @@
                     "processors": "",
                     "groups": "MouseAndKey",
                     "action": "DebugInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4e3d4cd1-ed1b-4ff7-9b5d-622059ceeb1c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8546ed94-e056-4942-9697-f900cb2ea452",
+                    "path": "<DualShockGamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92bb4d41-dc9f-4df3-972e-234da4490141",
+                    "path": "<SwitchProControllerHID>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1abd0bd2-9cff-4cf3-ae25-0a4d9a607b3e",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

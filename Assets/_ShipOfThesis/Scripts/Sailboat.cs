@@ -243,16 +243,6 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         sailAngleDelta = value.Get<float>();
         //Debug.Log("Mainsheet Input: " + sailAngleDelta);
     }
-    
-    public void OnGetCameraX(InputValue value)
-    {
-        // Debug.Log("CameraX");
-    }
-    
-    public void OnGetCameraY(InputValue value)
-    {
-        // Debug.Log("CameraY");
-    }
 
     public void OnSwapControls()
     {
@@ -400,61 +390,61 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     
     #endregion
 
-    #region Debug
-
-    private void OnDrawGizmos()
-    {
-        Vector3 flatVelocity = rb != null ? rb.velocity.ProjectOntoPlane(Vector3.up) : Vector3.zero;
-        Vector3 trueWind = currentWind.ProjectOntoPlane(Vector3.up);
-        Vector3 apparentWind = trueWind - flatVelocity;
-        Vector3 heading = -transform.right.ProjectOntoPlane(Vector3.up); // -transform.right is the bow of the boat
-
-        float windAngle = Vector3.SignedAngle(-heading, apparentWind, Vector3.up);
-        float optimalAngle = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle) / 180f) * Mathf.Sign(windAngle) * 90f;
-        
-        
-        // Adjust for falloff based on difference between Sail Angle and Optimal Angle, based on proximity to wind
-        float reflected = ReflectAngle(windAngle, sailAngle * 90f);
-        float degreesFromOptimal = Mathf.DeltaAngle(optimalAngle, (sailAngle * 90f));
-        float reflectedFromOptimal = Mathf.DeltaAngle(optimalAngle, reflected);
-       
-        float effectAngle = Mathf.Abs(degreesFromOptimal) < Mathf.Abs(reflectedFromOptimal) ? sailAngle * 90f : reflected;
-       
-        // Get T position of the sail (or its reflection) Lerping from the optimal angle to the wind axis.
-        
-        Vector3 origin = transform.position;
-        // Wind Angle
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(origin, origin + currentWind.normalized * 5);
-        
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(windAngle, Vector3.up) * transform.right) * 5);
-        
-        // Optimal Sail Angle
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(optimalAngle, Vector3.up) * transform.right) * 5);
-        
-        // Sail and Reflection
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(sailAngle * 90, Vector3.up) * transform.right) * 5);
-        
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(reflected, Vector3.up) * transform.right) * 5);
-        
-        Gizmos.color = Color.white;
-        Vector3 dir =
-            Quaternion.AngleAxis(Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f, Vector3.up) *
-            transform.right;
-        Gizmos.DrawLine(origin + (dir * 5), origin + (dir * 6));
-        
-        // Simple Controls - Target Heading
-        if (simpleControls)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(origin, origin + steerTarget * 5);
-        }
-    }
-
-    #endregion
+    // #region Debug
+    //
+    // private void OnDrawGizmos()
+    // {
+    //     Vector3 flatVelocity = rb != null ? rb.velocity.ProjectOntoPlane(Vector3.up) : Vector3.zero;
+    //     Vector3 trueWind = currentWind.ProjectOntoPlane(Vector3.up);
+    //     Vector3 apparentWind = trueWind - flatVelocity;
+    //     Vector3 heading = -transform.right.ProjectOntoPlane(Vector3.up); // -transform.right is the bow of the boat
+    //
+    //     float windAngle = Vector3.SignedAngle(-heading, apparentWind, Vector3.up);
+    //     float optimalAngle = OptimalSailAngle.Evaluate(Mathf.Abs(windAngle) / 180f) * Mathf.Sign(windAngle) * 90f;
+    //     
+    //     
+    //     // Adjust for falloff based on difference between Sail Angle and Optimal Angle, based on proximity to wind
+    //     float reflected = ReflectAngle(windAngle, sailAngle * 90f);
+    //     float degreesFromOptimal = Mathf.DeltaAngle(optimalAngle, (sailAngle * 90f));
+    //     float reflectedFromOptimal = Mathf.DeltaAngle(optimalAngle, reflected);
+    //    
+    //     float effectAngle = Mathf.Abs(degreesFromOptimal) < Mathf.Abs(reflectedFromOptimal) ? sailAngle * 90f : reflected;
+    //    
+    //     // Get T position of the sail (or its reflection) Lerping from the optimal angle to the wind axis.
+    //     
+    //     Vector3 origin = transform.position;
+    //     // Wind Angle
+    //     Gizmos.color = Color.blue;
+    //     Gizmos.DrawLine(origin, origin + currentWind.normalized * 5);
+    //     
+    //     Gizmos.color = Color.cyan;
+    //     Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(windAngle, Vector3.up) * transform.right) * 5);
+    //     
+    //     // Optimal Sail Angle
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(optimalAngle, Vector3.up) * transform.right) * 5);
+    //     
+    //     // Sail and Reflection
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(sailAngle * 90, Vector3.up) * transform.right) * 5);
+    //     
+    //     Gizmos.color = Color.magenta;
+    //     Gizmos.DrawLine(origin, origin + (Quaternion.AngleAxis(reflected, Vector3.up) * transform.right) * 5);
+    //     
+    //     Gizmos.color = Color.white;
+    //     Vector3 dir =
+    //         Quaternion.AngleAxis(Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f, Vector3.up) *
+    //         transform.right;
+    //     Gizmos.DrawLine(origin + (dir * 5), origin + (dir * 6));
+    //     
+    //     // Simple Controls - Target Heading
+    //     if (simpleControls)
+    //     {
+    //         Gizmos.color = Color.red;
+    //         Gizmos.DrawLine(origin, origin + steerTarget * 5);
+    //     }
+    // }
+    //
+    // #endregion
     
 }
