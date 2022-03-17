@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Cinemachine.Utility;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -27,6 +28,9 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         }
     }
 
+    public Transform windIndicator;
+    [Space]
+    
     [Header("Physics Constraints")]
     public float maxSpeed;
     public float decayRate;
@@ -108,6 +112,9 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
      private void Update()
      {
+         // Wind Particles
+         windIndicator.rotation = Quaternion.LookRotation(currentWind, Vector3.up);
+         
          // Apparent Wind
          Vector3 apparentWind = currentWind - rb.velocity;
          float windAngle = Vector3.SignedAngle(transform.right,apparentWind, Vector3.up); // transform.right is the stern of the boat
