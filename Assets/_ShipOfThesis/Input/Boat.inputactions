@@ -46,14 +46,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "DebugInfo",
-                    "type": "Button",
-                    "id": "a8aa4d2e-9081-4510-a104-b85282229d20",
-                    "expectedControlType": "Button",
-                    "processors": "AxisDeadzone",
-                    "interactions": ""
-                },
-                {
                     "name": "Pause",
                     "type": "Button",
                     "id": "5b885ed1-c324-4028-99cf-907a513c71fd",
@@ -77,10 +69,10 @@
                 {
                     "name": "",
                     "id": "5030cd42-1ef7-44da-a9f2-0dd4b70fa73a",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "ToggleHalyard",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -102,7 +94,7 @@
                     "path": "<Gamepad>/rightStick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetCameraX",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -113,7 +105,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetSteering",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -179,7 +171,7 @@
                     "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetCameraY",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -208,12 +200,12 @@
                 },
                 {
                     "name": "",
-                    "id": "37e9a7a2-579f-43bc-8710-2d1c360d3667",
-                    "path": "<Keyboard>/o",
+                    "id": "f44700d0-d181-4eae-aa31-ae878c8a7e9c",
+                    "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "MouseAndKey",
-                    "action": "DebugInfo",
+                    "groups": "Xbox;Playstation",
+                    "action": "SwapControls",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -234,18 +226,7 @@
                     "path": "<DualShockGamepad>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5d549c85-618d-4a14-a06a-154aea091b50",
-                    "path": "<SwitchProControllerHID>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Playstation",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -256,7 +237,7 @@
                     "path": "<XInputController>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -322,14 +303,6 @@
                     "expectedControlType": "Button",
                     "processors": "AxisDeadzone",
                     "interactions": ""
-                },
-                {
-                    "name": "DebugInfo",
-                    "type": "Button",
-                    "id": "c62cb1d3-9759-419d-ba4a-da2f4eba0269",
-                    "expectedControlType": "Button",
-                    "processors": "AxisDeadzone",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -339,7 +312,7 @@
                     "path": "<Gamepad>/dpad/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetRudder",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -350,7 +323,7 @@
                     "path": "<Gamepad>/leftStick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetRudder",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -405,7 +378,7 @@
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetHalyard",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -416,7 +389,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetHalyard",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -499,37 +472,37 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "624bfe74-5a77-48c2-a9dd-0d8b5187ad67",
-                    "path": "<Gamepad>/leftStick/y",
+                    "name": "Gamepad",
+                    "id": "dc2a5b59-801f-410d-b55e-4b1b81d4aa32",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "",
                     "action": "GetMainsheet",
-                    "isComposite": false,
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "9eadc824-5315-4d50-a8b2-13beb8566bda",
-                    "path": "<Gamepad>/dpad/y",
+                    "name": "negative",
+                    "id": "c736b09c-9a57-48fa-bf20-d2ae20572248",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetMainsheet",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "85db18f2-0776-45cf-a407-8dadb9238b60",
-                    "path": "<Mouse>/scroll/y",
+                    "name": "positive",
+                    "id": "8d22be52-a76b-4109-8cbe-009b8b638382",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "MouseAndKey",
+                    "groups": "Xbox;Playstation",
                     "action": "GetMainsheet",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -548,7 +521,7 @@
                     "path": "<Gamepad>/rightStick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetCameraX",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -559,7 +532,7 @@
                     "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox;Playstation",
                     "action": "GetCameraY",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -588,12 +561,12 @@
                 },
                 {
                     "name": "",
-                    "id": "e3c8cf22-ae8b-495a-827e-65c6ea0d7fa7",
-                    "path": "<Keyboard>/o",
+                    "id": "3c856de3-8abd-4be2-b406-71c423d8bc0a",
+                    "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "MouseAndKey",
-                    "action": "DebugInfo",
+                    "groups": "Xbox;Playstation",
+                    "action": "SwapControls",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -614,18 +587,7 @@
                     "path": "<DualShockGamepad>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "92bb4d41-dc9f-4df3-972e-234da4490141",
-                    "path": "<SwitchProControllerHID>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Playstation",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -636,7 +598,7 @@
                     "path": "<XInputController>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -662,11 +624,22 @@
             ]
         },
         {
-            "name": "Gamepad",
-            "bindingGroup": "Gamepad",
+            "name": "Xbox",
+            "bindingGroup": "Xbox",
             "devices": [
                 {
-                    "devicePath": "<Gamepad>",
+                    "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Playstation",
+            "bindingGroup": "Playstation",
+            "devices": [
+                {
+                    "devicePath": "<DualShockGamepad>",
                     "isOptional": false,
                     "isOR": false
                 }

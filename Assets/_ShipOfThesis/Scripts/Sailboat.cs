@@ -18,6 +18,9 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     
     #region Public Members
 
+    [HideInInspector] public bool freeplay;
+    [HideInInspector] public bool controlsActive;
+    
     private bool simpleControls;
     public bool SimpleControls
     {
@@ -214,14 +217,16 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     public void OnToggleHalyard()
     {
         //Debug.Log("Toggle Halyard");
-        halyardToggleUp = !halyardToggleUp;
+        if (controlsActive)
+            halyardToggleUp = !halyardToggleUp;
     }
     
     public void OnGetHalyard(InputValue value)
     {
         
         // Debug.Log("Move Halyard");
-        halyardDelta = value.Get<float>();
+        if (controlsActive)
+            halyardDelta = value.Get<float>();
         //Debug.Log("Halyard Delta: " + halyardDelta);
 
     }
@@ -230,8 +235,9 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         // Debug.Log("Get Steering");
         var inputSteering = value.Get<Vector2>();
-        steerTarget = (mainCam.transform.right * inputSteering.x + mainCam.transform.forward * inputSteering.y)
-            .ProjectOntoPlane(Vector3.up).normalized;
+        if (controlsActive)
+            steerTarget = (mainCam.transform.right * inputSteering.x + mainCam.transform.forward * inputSteering.y)
+                .ProjectOntoPlane(Vector3.up).normalized;
         //Debug.Log("Steering: " + steerTarget);
 
     }
@@ -239,7 +245,8 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     public void OnGetRudder(InputValue value)
     {
         // Debug.Log("Move Rudder");
-        rudderInput = value.Get<float>();
+        if (controlsActive)
+            rudderInput = value.Get<float>();
         //Debug.Log("Rudder Input: " + rudderInput);
 
     }
@@ -247,19 +254,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     public void OnGetMainsheet(InputValue value)
     {
         // Debug.Log("Move Mainsheet");
-        sailAngleDelta = value.Get<float>();
+        if (controlsActive)
+            sailAngleDelta = value.Get<float>();
         //Debug.Log("Mainsheet Input: " + sailAngleDelta);
     }
 
     public void OnSwapControls()
     {
-        SimpleControls = !simpleControls;
-    }
-
-    public void OnDebugInfo()
-    {
-        Debug.Log("Sail Angle: " + sailAngle + " | Rudder Angle: " + rudderAngle + " | Mainsail Height: " + sailHeight + "\n" +
-                  "Simple: " + simpleControls + " | HalyardToggle: " + halyardToggleUp + " | Mainsheet: " + sailAngleLocalMax);
+        if (freeplay)
+            SimpleControls = !simpleControls;
     }
 
     #endregion

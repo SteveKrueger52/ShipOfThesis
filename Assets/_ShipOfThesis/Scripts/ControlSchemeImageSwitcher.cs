@@ -1,18 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ControlSchemeImageSwitcher : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Image ToSwitch;
+
+    public Sprite Keyboard;
+    public Sprite Playstation;
+    public Sprite Xbox;
+
+    private void OnEnable()
     {
-        
+        StudyManager._instance.ControlsChanged += ChangeImage;
+        //Debug.Log("PrintOnDisable: script was enabled");
+        ChangeImage();
+    }
+    
+    private void OnDisable()
+    {
+        StudyManager._instance.ControlsChanged += ChangeImage;
+        //Debug.Log("PrintOnDisable: script was disabled");
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ChangeImage()
     {
-        
+        switch (StudyManager._instance.current)
+        {
+            case StudyManager.ControllerEnum.PC:
+                ToSwitch.sprite = Keyboard;
+                break;
+            case StudyManager.ControllerEnum.XBOX:
+                ToSwitch.sprite = Xbox;
+                break;
+            case StudyManager.ControllerEnum.PS4:
+                ToSwitch.sprite = Playstation;
+                break;
+        }
     }
 }

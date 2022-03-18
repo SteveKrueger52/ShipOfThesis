@@ -6,8 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Pregenerated/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/_ShipOfThesis/Scenes/MainMenu.unity
+    guid: 14a6803465ef0384eaee0291e5ef3f6f
+  - enabled: 1
+    path: Assets/_ShipOfThesis/Scenes/Disclaimer.unity
+    guid: d0368ab187d07424281cc8f32e369bf3
+  - enabled: 1
+    path: Assets/_ShipOfThesis/Scenes/ControlsIntro.unity
+    guid: 2422ca11148112d4ebdd311c18284d0a
+  - enabled: 1
+    path: Assets/_ShipOfThesis/Scenes/MainScene.unity
+    guid: 448943ecd2e2ce04d8c4be3864347c70
+  - enabled: 1
+    path: Assets/_ShipOfThesis/Scenes/Results.unity
+    guid: 3afa6831dd6158d40830a553dc530a6e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6a6dc61d286ae4d739eaacd3a0bbff52,
       type: 2}
