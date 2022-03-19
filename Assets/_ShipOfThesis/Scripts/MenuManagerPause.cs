@@ -4,6 +4,7 @@ using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MenuManagerPause : MenuEssentials
@@ -48,10 +49,10 @@ public class MenuManagerPause : MenuEssentials
         MainHUD.SetActive(true);
         ControlsScreen.SetActive(false);
         
-        boat.freeplay = StudyManager._instance.freePlay;
+        boat.freeplay = StudyManager.Instance.freePlay;
         boat.controlsActive = false;
         simple = !boat.freeplay && // Default controls for free play are complex
-                              StudyManager._instance.stage == (StudyManager._instance.simpleFirst ?  1 : 2);
+                              StudyManager.Instance.stage == (StudyManager.Instance.simpleFirst ?  1 : 2);
         boat.SimpleControls = simple;
         
         foreach(GameObject go in SimpleTips)
@@ -59,9 +60,9 @@ public class MenuManagerPause : MenuEssentials
         foreach(GameObject go in ComplexTips)
             go.SetActive(!simple);
         foreach(GameObject go in FreePlayTips)
-            go.SetActive(StudyManager._instance.freePlay);
+            go.SetActive(StudyManager.Instance.freePlay);
         
-        practice = StudyManager._instance.subStage == 1;
+        practice = StudyManager.Instance.subStage == 1;
         SkipButton.gameObject.SetActive(practice);
         ResetButton.gameObject.SetActive(!practice);
         
@@ -78,7 +79,7 @@ public class MenuManagerPause : MenuEssentials
         if (fadeIn)
             StartCoroutine(Countdown());
         else
-            StudyManager._instance.Next();
+            StudyManager.Instance.Next();
     }
 
     private IEnumerator Countdown()
@@ -94,7 +95,7 @@ public class MenuManagerPause : MenuEssentials
         interactible = true;
         boat.controlsActive = interactible;
 
-        StandardTimer.gameObject.SetActive(!StudyManager._instance.freePlay);
+        StandardTimer.gameObject.SetActive(!StudyManager.Instance.freePlay);
         timerFrom = Time.time;
         
         if (!practice)
@@ -123,21 +124,21 @@ public class MenuManagerPause : MenuEssentials
     private void SendPracticeResults()
     {
         boat.SendPracticeResults();
-        StudyManager._instance.ReceivePracticeResults(pauses,controlChecks,practiceTime);
+        StudyManager.Instance.ReceivePracticeResults(pauses,controlChecks,practiceTime);
         StartCoroutine(FadeInOut(false, 1f));
     }
     
     private void SendResults(float[] legTimes)
     {
         boat.SendResults();
-        StudyManager._instance.ReceiveResults(pauses,controlChecks,legTimes);
+        StudyManager.Instance.ReceiveResults(pauses,controlChecks,legTimes);
         StartCoroutine(FadeInOut(false, 1f));
     }
     
     // Update is called once per frame
     void Update()
     {
-        if (interactible && !StudyManager._instance.freePlay)
+        if (interactible && !StudyManager.Instance.freePlay)
         {
             StandardTimer.text = Timestamp(practice ? (timerFrom + practiceTime) - Time.time : Time.time - timerFrom);
             if (practice && Time.time > timerFrom + practiceTime)
@@ -156,7 +157,7 @@ public class MenuManagerPause : MenuEssentials
         }
 
         if (Mathf.Approximately(0f, Time.timeScale))
-            Cursor.visible = StudyManager._instance.current == StudyManager.ControllerEnum.PC;
+            Cursor.visible = PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC;
     }
 
     public void Pause(bool paused)
@@ -189,13 +190,13 @@ public class MenuManagerPause : MenuEssentials
 
     public void AbortStudy()
     {
-        StudyManager._instance.AbortToMenu();
+        StudyManager.Instance.AbortToMenu();
     }
 
     public void Reset()
     {       
-        if (!StudyManager._instance.freePlay)
-            StudyManager._instance.IncrementResets();
+        if (!StudyManager.Instance.freePlay)
+            StudyManager.Instance.IncrementResets();
         StudyManager.ChangeScene(3,true);
     }
 

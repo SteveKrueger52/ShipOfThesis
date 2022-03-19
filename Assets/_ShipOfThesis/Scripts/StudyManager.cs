@@ -1,27 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class StudyManager : MonoBehaviour
+public class StudyManager : Singleton<StudyManager>
 {
-    public static StudyManager _instance;
     [HideInInspector] public bool simpleFirst;
-    
-    
+
     public int stage = -1; // 0 - Disclaimer, 1 - Stage 1, 2 - Stage 2, 3 - Results
     public int subStage = 0; // 0 - Briefing, 1 - Practice, 2 - Actual
     public bool studyComplete;
     [HideInInspector] public bool freePlay;
-    public enum ControllerEnum { PC, XBOX, PS4 }
-    [HideInInspector] public ControllerEnum current = ControllerEnum.PC;
     
-    public delegate void ControlsChangedHandler();
-    public event ControlsChangedHandler ControlsChanged;
+    
+    public delegate void SceneChangedHandler();
+    public event SceneChangedHandler SceneChanged;
 
     #region Analytics
 
@@ -35,37 +29,10 @@ public class StudyManager : MonoBehaviour
 
     #endregion
 
-    private void Awake()
+    protected override void OnAwake()
     {
-        if (_instance == null)
-            _instance = this;
-        else 
-            Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+        base.OnAwake();
         accuracyB = new List<float>();
-        
-    }
-    
-    
-    
-    void OnInputDeviceChange(InputUser user, InputUserChange change, InputDevice device) {
-        if (change == InputUserChange.ControlSchemeChanged) {
-            switch (user.controlScheme.Value.name)
-            {
-                case "Xbox":
-                    current = ControllerEnum.XBOX;
-                    break;
-                case "Playstation":
-                    current = ControllerEnum.PS4;
-                    break;
-                default:
-                    current = ControllerEnum.PC;
-                    break;
-            }
-            // ControlsChanged?.Invoke();
-            FindObjectOfType<MenuEssentials>().OnControlsChanged();
-            Debug.Log("Now Using " + user.controlScheme.Value.name);
-        }
     }
     
     public void BeginStudy()
@@ -119,12 +86,13 @@ public class StudyManager : MonoBehaviour
                 ChangeScene(0);
                 break;
         }
+        SceneChanged?.Invoke();
     }
     
     public static void ChangeScene(int index, bool gameplay = false)
     {
         Cursor.lockState = gameplay ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !gameplay && (_instance.current == ControllerEnum.PC);
+        Cursor.visible = !gameplay && (PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC);
         Time.timeScale = gameplay ? 1f : 0f;
 
         SceneManager.LoadScene(index);

@@ -170,7 +170,6 @@ GameObject:
   - component: {fileID: 2066962263141538721}
   - component: {fileID: 309068537}
   - component: {fileID: 8385205356164624891}
-  - component: {fileID: 309068538}
   m_Layer: 0
   m_Name: Boat Rig
   m_TagString: Untagged
@@ -330,6 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1efe38a2d70270b45b2430280d9c8e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freeplay: 0
+  controlsActive: 0
   windIndicator: {fileID: 2117403580887079791}
   maxSpeed: 5
   decayRate: 0.1
@@ -568,37 +569,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &309068538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14624835638355031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5c39a1a364d3b4f12bfe430f5817a350,
-    type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Simple
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &932980575937955712
 GameObject:
   m_ObjectHideFlags: 0

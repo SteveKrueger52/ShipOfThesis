@@ -13,23 +13,18 @@ public class MenuManagerMain : MenuEssentials
     {
         ToggleAbout(false);
         Time.timeScale = 1f;
-        FreePlayButton.interactable = StudyManager._instance.studyComplete;
+        FreePlayButton.interactable = StudyManager.Instance.studyComplete;
         FreePlayText.SetActive(!FreePlayButton.interactable);
     }
 
     public void BeginStudy()
     {
-        StudyManager._instance.BeginStudy();
-    }
-
-    public void Update()
-    {
-        Cursor.visible = StudyManager._instance.current == StudyManager.ControllerEnum.PC;
+        StudyManager.Instance.BeginStudy();
     }
 
     public void FreePlay()
     {
-        StudyManager._instance.FreePlay();
+        StudyManager.Instance.FreePlay();
     }
 
     public void ToggleAbout(bool visible)

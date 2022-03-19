@@ -8,8 +8,8 @@ public class MenuManagerIntro : MenuEssentials
 
     private void Start()
     {
-        bool simpleFirst = StudyManager._instance.simpleFirst;
-        int stage = StudyManager._instance.stage;
+        bool simpleFirst = StudyManager.Instance.simpleFirst;
+        int stage = StudyManager.Instance.stage;
         FillOutSurvey.SetActive(stage > 1);
         TaskIntro.SetActive(stage < 3);
         Preview.SetActive(stage < 3);
@@ -17,11 +17,6 @@ public class MenuManagerIntro : MenuEssentials
         Simple .SetActive(stage == 1 ?  simpleFirst : !simpleFirst);
         Complex.SetActive(stage == 1 ? !simpleFirst :  simpleFirst);
         OnControlsChanged();
-    }
-
-    private void Update()
-    {
-        Cursor.visible = StudyManager._instance.current == StudyManager.ControllerEnum.PC;
     }
 
     protected override void SelectDefaultMenuElement()

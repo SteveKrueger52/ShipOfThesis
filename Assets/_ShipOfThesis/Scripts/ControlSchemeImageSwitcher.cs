@@ -10,14 +10,14 @@ public class ControlSchemeImageSwitcher : MonoBehaviour
 
     private void OnEnable()
     {
-        StudyManager._instance.ControlsChanged += ChangeImage;
+        PlayerInputManager.Instance.ControlsChanged += ChangeImage;
         //Debug.Log("PrintOnDisable: script was enabled");
         ChangeImage();
     }
     
     private void OnDisable()
     {
-        StudyManager._instance.ControlsChanged += ChangeImage;
+        PlayerInputManager.Instance.ControlsChanged += ChangeImage;
         //Debug.Log("PrintOnDisable: script was disabled");
     }
 
@@ -27,15 +27,15 @@ public class ControlSchemeImageSwitcher : MonoBehaviour
         Xbox.gameObject.SetActive(false);
         Playstation.gameObject.SetActive(false);
         
-        switch (StudyManager._instance.current)
+        switch (PlayerInputManager.Instance.currentScheme)
         {
-            case StudyManager.ControllerEnum.PC:
+            case PlayerInputManager.ControllerEnum.PC:
                 Keyboard.gameObject.SetActive(true);
                 break;
-            case StudyManager.ControllerEnum.XBOX:
+            case PlayerInputManager.ControllerEnum.XBOX:
                 Xbox.gameObject.SetActive(true);
                 break;
-            case StudyManager.ControllerEnum.PS4:
+            case PlayerInputManager.ControllerEnum.PS4:
                 Playstation.gameObject.SetActive(true);
                 break;
         }

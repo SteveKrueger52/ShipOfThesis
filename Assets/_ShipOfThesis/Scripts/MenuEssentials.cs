@@ -12,23 +12,25 @@ public abstract class MenuEssentials : MonoBehaviour
     
     public void StudyNext()
     {
-        StudyManager._instance.Next();
+        StudyManager.Instance.Next();
     }
     
-    // private void OnEnable()
-    // {
-    //     StudyManager._instance.ControlsChanged += OnControlsChanged;
-    //
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     StudyManager._instance.ControlsChanged -= OnControlsChanged;
-    // }
+    private void OnEnable()
+    {
+        PlayerInputManager.Instance.ControlsChanged += OnControlsChanged;
+    
+    }
+    
+    private void OnDisable()
+    {
+        PlayerInputManager.Instance.ControlsChanged -= OnControlsChanged;
+    }
 
     public void OnControlsChanged()
     {
-        if (StudyManager._instance.current == StudyManager.ControllerEnum.PC)
+        Cursor.visible = PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC;
+
+        if (PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC)
             EventSystem.current.SetSelectedGameObject(null);
         else 
             SelectDefaultMenuElement();

@@ -42,7 +42,8 @@ public class WindZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         IWindObject obj = other.gameObject.GetComponent<IWindObject>();
-        obj.EnterWind(this);
+        if (obj != null)
+            obj.EnterWind(this);
     }
 
     private void OnTriggerExit(Collider other)
