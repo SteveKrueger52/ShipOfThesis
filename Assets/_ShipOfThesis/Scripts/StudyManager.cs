@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,16 @@ public class StudyManager : MonoBehaviour
     public delegate void ControlsChangedHandler();
     public event ControlsChangedHandler ControlsChanged;
 
+    #region Analytics
+
+    private float[] legTimesA, legTimesB;
+    private float practiceTimeA, practiceTimeB;
+    private List<float> accuracyB; // No Accuracy Measurement on Simple Controls
+    private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
+        pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
+
+    #endregion
+    
     private void Awake()
     {
         if (_instance != null)
@@ -67,7 +78,7 @@ public class StudyManager : MonoBehaviour
 
     public void FreePlay()
     {
-        
+        //TODO 
     }
 
     // Proceed to next stage
@@ -101,10 +112,79 @@ public class StudyManager : MonoBehaviour
     public static void ChangeScene(int index, bool gameplay = false)
     {
         Cursor.lockState = gameplay ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !gameplay;
+        Cursor.visible = !gameplay && (_instance.current == ControllerEnum.PC);
         Time.timeScale = gameplay ? 1f : 0f;
 
         SceneManager.LoadScene(index);
     }
 
+    public bool isSimple()
+    {
+        return (stage == 1 && simpleFirst) || (stage == 2 && !simpleFirst);
+    }
+    public void IncrementResets()
+    {
+        if (isSimple()) resetsA++;
+        else resetsB++;
+    }
+
+    public void ReceivePracticeBoatResults(int crashes)
+    {
+        if (isSimple())
+            crashesA1 = crashes;
+        else
+            crashesB1 = crashes;
+    }
+    
+    public void ReceiveBoatResults(int crashes, int resets, List<float> accuracy = null)
+    {
+        if (isSimple())
+        {
+            crashesA2 = crashes;
+            resetsA = resets;
+        }
+        else
+        {
+            crashesB2 = crashes;
+            resetsB = resets;
+            accuracyB = accuracy;
+        }
+    }
+    
+    public void ReceivePracticeResults(int pauses, int controlChecks, float practiceTime)
+    {
+        if (isSimple())
+        {
+            pausesA1 = pauses;
+            controlsA1 = controlChecks;
+            practiceTimeA = practiceTime;
+        }
+        else
+        {
+            pausesB1 = pauses;
+            controlsB1 = controlChecks;
+            practiceTimeB = practiceTime;
+        }
+    }
+    
+    public void ReceiveResults(int pauses, int controlChecks, float[] legTimes)
+    {
+        if (isSimple())
+        {
+            pausesA2 = pauses;
+            controlsA2 = controlChecks;
+            legTimesA = legTimesB;
+        }
+        else
+        {
+            pausesB2 = pauses;
+            controlsB2 = controlChecks;
+            legTimesB = legTimes;
+        }
+    }
+
+    public void AbortToMenu()
+    {
+        //TODO 
+    }
 }

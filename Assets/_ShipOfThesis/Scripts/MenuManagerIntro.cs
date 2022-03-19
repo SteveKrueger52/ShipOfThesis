@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MenuManagerIntro : MenuEssentials
 {
@@ -14,5 +15,10 @@ public class MenuManagerIntro : MenuEssentials
         Debrief.SetActive(stage == 3);
         Simple .SetActive(stage == 1 ?  simpleFirst : !simpleFirst);
         Complex.SetActive(stage == 1 ? !simpleFirst :  simpleFirst);
+    }
+
+    private void Update()
+    {
+        Cursor.visible = StudyManager._instance.current == StudyManager.ControllerEnum.PC;
     }
 }

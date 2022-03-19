@@ -397,7 +397,17 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         // Out of iterations, return closest midpoint (with 10 iterations, accuracy is within 0.05%)
         return upper + lower / 2;
     }
-    
+
+    public void SendResults()
+    {
+        //TODO 
+    }
+
+    public void SendPracticeResults()
+    {
+        //TODO 
+    }
+
     #endregion
 
     // #region Debug
@@ -456,5 +466,5 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     // }
     //
     // #endregion
-    
+
 }

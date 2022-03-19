@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuManagerMain : MenuEssentials
@@ -19,6 +17,11 @@ public class MenuManagerMain : MenuEssentials
     public void BeginStudy()
     {
         StudyManager._instance.BeginStudy();
+    }
+
+    public void Update()
+    {
+        Cursor.visible = StudyManager._instance.current == StudyManager.ControllerEnum.PC;
     }
 
     public void FreePlay()
