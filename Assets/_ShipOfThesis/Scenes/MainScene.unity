@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -3124,7 +3124,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077938753}
-  m_LocalRotation: {x: -0.021677462, y: 0.43887782, z: -0.010591734, w: -0.8982228}
+  m_LocalRotation: {x: -0.02167747, y: 0.43887788, z: -0.010591737, w: -0.89822274}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15200,7 +15200,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2023937720}
-  m_LocalRotation: {x: -0.06757157, y: 0.43990293, z: -0.033216868, w: -0.8948834}
+  m_LocalRotation: {x: -0.067567915, y: 0.4400015, z: -0.033224314, w: -0.8948349}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15619,6 +15619,7 @@ GameObject:
   - component: {fileID: 2139873666}
   - component: {fileID: 2139873667}
   - component: {fileID: 2139873668}
+  - component: {fileID: 2139873669}
   m_Layer: 0
   m_Name: CM_Main
   m_TagString: MainCamera
@@ -15684,7 +15685,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2139873662}
-  m_LocalRotation: {x: 0.021677462, y: -0.43887782, z: 0.010591759, w: 0.8982228}
+  m_LocalRotation: {x: 0.021677468, y: -0.43887788, z: 0.010591762, w: 0.89822274}
   m_LocalPosition: {x: -4.1815567, y: 5, z: -10.602758}
   m_LocalScale: {x: 0.15106, y: 0.15106, z: 0.15106}
   m_Children: []
@@ -15851,6 +15852,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2139873669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139873662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9252d638ad36b6b4492bd3b6fb282670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderScale: 1
+  reflectionLayer:
+    serializedVersion: 2
+    m_Bits: 4294967279
+  reflectSkybox: 1
+  reflectionTarget: {fileID: 2074455122893202595}
+  reflectionPlaneOffset: 0
+  hideReflectionCamera: 1
 --- !u!224 &205026728722541307
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16282,17 +16303,17 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   colorGradientTexture: {fileID: 0}
   shallowColor: {r: 0, g: 0.7725491, b: 0.62352943, a: 0.5019608}
-  deepColor: {r: 0.01176471, g: 0.28609657, b: 0.50980073, a: 1}
+  deepColor: {r: 0.01176471, g: 0.28609598, b: 0.50980073, a: 1}
   colorDepth: 0.8
-  horizonColor: {r: 0, g: 0.22727308, b: 0.8, a: 1}
+  horizonColor: {r: 0, g: 0.22727248, b: 0.8, a: 1}
   horizonDistance: 20
   shoreFade: 1
-  shoreColor: {r: 0, g: 0.98039216, b: 0.30178288, a: 0}
+  shoreColor: {r: 0, g: 0.98039216, b: 0.30178228, a: 0}
   shoreStrength: 0
   shoreBlend: 1
   shoreDepth: 0.74
   waveColor: {r: 0, g: 0, b: 0, a: 0}
-  underwaterColor: {r: 0.20375293, g: 0.30962598, b: 0.517647, a: 0}
+  underwaterColor: {r: 0.20375237, g: 0.30962536, b: 0.517647, a: 0}
   underwaterColorStrength: 0
   underwaterRefractionStrength: 0.099
   surfaceFoamTexture: {fileID: 2800000, guid: d3b0d77dfe711a04c8ff18ecc260aa66, type: 3}
