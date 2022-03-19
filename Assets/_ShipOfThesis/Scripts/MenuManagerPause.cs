@@ -125,14 +125,14 @@ public class MenuManagerPause : MenuEssentials
     {
         boat.SendPracticeResults();
         StudyManager.Instance.ReceivePracticeResults(pauses,controlChecks,practiceTime);
-        StartCoroutine(FadeInOut(false, 1f));
+        StartCoroutine(FadeInOut(false, fadeTime));
     }
     
     private void SendResults(float[] legTimes)
     {
         boat.SendResults();
         StudyManager.Instance.ReceiveResults(pauses,controlChecks,legTimes);
-        StartCoroutine(FadeInOut(false, 1f));
+        StartCoroutine(FadeInOut(false, fadeTime));
     }
     
     // Update is called once per frame

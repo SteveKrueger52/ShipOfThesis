@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using Cinemachine.Utility;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
 
 public class Sailboat : MonoBehaviour , WindZone.IWindObject
@@ -27,7 +25,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         get => simpleControls;
         set {
             simpleControls = value;
-            input.SwitchCurrentActionMap(simpleControls ? "Simple" : "Complex");
+            PlayerInputManager.Instance.SetControlComplexity(simpleControls);
         }
     }
 
@@ -81,9 +79,6 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private Animator anim;
     private Camera mainCam;
 
-    // Input
-    private PlayerInput input;
-    
     private bool halyardToggleUp;
     private float halyardDelta;
     private float sailAngleDelta;
@@ -105,7 +100,6 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
      {
          rb = GetComponent<Rigidbody>();
          anim = GetComponent<Animator>();
-         input = GetComponent<PlayerInput>();
          windZones = new List<WindZone>();
          mainCam = Camera.main;
          

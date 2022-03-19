@@ -46,7 +46,8 @@ public class PlayerInputManager : Singleton<PlayerInputManager>
     
     private void OnDisable()
     {
-        _playerInput.onControlsChanged -= OnControlsChanged;
+        if (_playerInput != null)
+            _playerInput.onControlsChanged -= OnControlsChanged;
         StudyManager.Instance.SceneChanged -= FindBoat;
     }
 
@@ -54,6 +55,11 @@ public class PlayerInputManager : Singleton<PlayerInputManager>
     {
         _boat = FindObjectOfType<Sailboat>();
         _playerInput.camera = Camera.main;
+    }
+
+    public void SetControlComplexity(bool simple)
+    {
+        _playerInput.SwitchCurrentActionMap(simple ? "Simple" : "Complex");
     }
     
     public void OnToggleHalyard()

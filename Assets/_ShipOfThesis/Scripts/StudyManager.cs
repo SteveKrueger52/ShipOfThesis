@@ -24,6 +24,7 @@ public class StudyManager : Singleton<StudyManager>
     private List<float> accuracyB; // No Accuracy Measurement on Simple Controls
     private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
+    private PlayerInputManager.ControllerEnum controllerA, controllerB;
 
     private InputDevice device;
 
