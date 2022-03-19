@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ControlSchemeImageSwitcher : MonoBehaviour
 {
-    public Image ToSwitch;
-
-    public Sprite Keyboard;
-    public Sprite Playstation;
-    public Sprite Xbox;
+    public Image Keyboard;
+    public Image Playstation;
+    public Image Xbox;
 
     private void OnEnable()
     {
@@ -24,16 +23,20 @@ public class ControlSchemeImageSwitcher : MonoBehaviour
 
     private void ChangeImage()
     {
+        Keyboard.gameObject.SetActive(false);
+        Xbox.gameObject.SetActive(false);
+        Playstation.gameObject.SetActive(false);
+        
         switch (StudyManager._instance.current)
         {
             case StudyManager.ControllerEnum.PC:
-                ToSwitch.sprite = Keyboard;
+                Keyboard.gameObject.SetActive(true);
                 break;
             case StudyManager.ControllerEnum.XBOX:
-                ToSwitch.sprite = Xbox;
+                Xbox.gameObject.SetActive(true);
                 break;
             case StudyManager.ControllerEnum.PS4:
-                ToSwitch.sprite = Playstation;
+                Playstation.gameObject.SetActive(true);
                 break;
         }
     }

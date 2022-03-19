@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MenuManagerMain : MenuEssentials
 {
+    public Button AboutButton;
     public Button FreePlayButton;
     public GameObject FreePlayText, Menu, About;
 
@@ -33,10 +36,19 @@ public class MenuManagerMain : MenuEssentials
     {
         Menu.SetActive(!visible);
         About.SetActive(visible);
+        OnControlsChanged();
     }
 
     public void Exit()
     {
         Application.Quit();
+    }
+
+    protected override void SelectDefaultMenuElement()
+    {
+        if (Menu.activeSelf)
+            EventSystem.current.SetSelectedGameObject(firstSelected);
+        else           
+            EventSystem.current.SetSelectedGameObject(AboutButton.gameObject);
     }
 }

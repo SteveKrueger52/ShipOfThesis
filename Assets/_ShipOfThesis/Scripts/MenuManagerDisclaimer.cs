@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class MenuManagerDisclaimer : MonoBehaviour
+public class MenuManagerDisclaimer : MenuEssentials
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void SelectDefaultMenuElement()
     {
-        
+        EventSystem.current.SetSelectedGameObject(firstSelected);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        OnControlsChanged();
     }
 }

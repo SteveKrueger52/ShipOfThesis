@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
@@ -11,8 +13,8 @@ public class StudyManager : MonoBehaviour
     [HideInInspector] public bool simpleFirst;
     
     
-    [HideInInspector] public int stage = -1; // 0 - Disclaimer, 1 - Stage 1, 2 - Stage 2, 3 - Results
-    [HideInInspector] public int subStage = 0; // 0 - Briefing, 1 - Practice, 2 - Actual
+    public int stage = -1; // 0 - Disclaimer, 1 - Stage 1, 2 - Stage 2, 3 - Results
+    public int subStage = 0; // 0 - Briefing, 1 - Practice, 2 - Actual
     public bool studyComplete;
     [HideInInspector] public bool freePlay;
     public enum ControllerEnum { PC, XBOX, PS4 }
@@ -29,25 +31,22 @@ public class StudyManager : MonoBehaviour
     private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
 
+    private InputDevice device;
+
     #endregion
-    
+
     private void Awake()
     {
-        if (_instance != null)
-            Destroy(this);
-        _instance = this;
+        if (_instance == null)
+            _instance = this;
+        else 
+            Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void OnEnable()
-    {
-        InputUser.onChange += OnInputDeviceChange;
+        accuracyB = new List<float>();
+        
     }
     
-    private void OnDisable()
-    {
-        InputUser.onChange -= OnInputDeviceChange;
-    }
+    
     
     void OnInputDeviceChange(InputUser user, InputUserChange change, InputDevice device) {
         if (change == InputUserChange.ControlSchemeChanged) {
@@ -63,7 +62,9 @@ public class StudyManager : MonoBehaviour
                     current = ControllerEnum.PC;
                     break;
             }
-            ControlsChanged?.Invoke();
+            // ControlsChanged?.Invoke();
+            FindObjectOfType<MenuEssentials>().OnControlsChanged();
+            Debug.Log("Now Using " + user.controlScheme.Value.name);
         }
     }
     
@@ -73,19 +74,30 @@ public class StudyManager : MonoBehaviour
         subStage = 0;
         simpleFirst = Random.value > 0.5f;
         freePlay = false;
+        
+        //Reset Data Fields
+        resetsA    = resetsB                              = 0;
+        crashesA1  = crashesA2  = crashesB1  = crashesB2  = 0;
+        pausesA1   = pausesA2   = pausesB1   = pausesB2   = 0;
+        controlsA1 = controlsA2 = controlsB1 = controlsB2 = 0;
         Next();
     }
 
     public void FreePlay()
     {
-        //TODO 
+        freePlay = true;
+        stage = -1;
+        subStage = -1;
+        ChangeScene(3,true);
     }
 
     // Proceed to next stage
     public void Next()
     {
-        subStage = stage == 0 ? 0 : (subStage + 1) % 3; // 0 -> 1 -> 2 -> 0
-        stage = subStage == 0 ? subStage + 1 : subStage; // Increments when subStage ticks over
+        subStage = ((stage == 0 && subStage == 0) ? 2 : ((subStage + 1) % 3)); // 0 -> 1 -> 2 -> 0
+        stage = (subStage == 0 ? stage + 1 : stage); // Increments when subStage ticks over
+        
+        Debug.Log("Stage: " + stage + " | Substage: " +subStage);
         switch (stage)
         {
             case 0: // Disclaimer
@@ -131,23 +143,23 @@ public class StudyManager : MonoBehaviour
     public void ReceivePracticeBoatResults(int crashes)
     {
         if (isSimple())
-            crashesA1 = crashes;
+            crashesA1 += crashes;
         else
-            crashesB1 = crashes;
+            crashesB1 += crashes;
     }
     
     public void ReceiveBoatResults(int crashes, int resets, List<float> accuracy = null)
     {
         if (isSimple())
         {
-            crashesA2 = crashes;
-            resetsA = resets;
+            crashesA2 += crashes;
+            resetsA += resets;
         }
         else
         {
-            crashesB2 = crashes;
-            resetsB = resets;
-            accuracyB = accuracy;
+            crashesB2 += crashes;
+            resetsB += resets;
+            if (accuracy != null) accuracyB.AddRange(accuracy);
         }
     }
     
@@ -155,14 +167,14 @@ public class StudyManager : MonoBehaviour
     {
         if (isSimple())
         {
-            pausesA1 = pauses;
-            controlsA1 = controlChecks;
+            pausesA1 += pauses;
+            controlsA1 += controlChecks;
             practiceTimeA = practiceTime;
         }
         else
         {
-            pausesB1 = pauses;
-            controlsB1 = controlChecks;
+            pausesB1 += pauses;
+            controlsB1 += controlChecks;
             practiceTimeB = practiceTime;
         }
     }
@@ -171,20 +183,22 @@ public class StudyManager : MonoBehaviour
     {
         if (isSimple())
         {
-            pausesA2 = pauses;
-            controlsA2 = controlChecks;
-            legTimesA = legTimesB;
+            pausesA2 += pauses;
+            controlsA2 += controlChecks;
+            legTimesA = legTimes;
         }
         else
         {
-            pausesB2 = pauses;
-            controlsB2 = controlChecks;
+            pausesB2 += pauses;
+            controlsB2 += controlChecks;
             legTimesB = legTimes;
         }
     }
 
     public void AbortToMenu()
     {
-        //TODO 
+        stage = -1;
+        subStage = -1;
+        ChangeScene(0);
     }
 }

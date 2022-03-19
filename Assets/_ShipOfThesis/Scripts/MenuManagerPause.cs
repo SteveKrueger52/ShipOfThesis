@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MenuManagerPause : MenuEssentials
@@ -9,9 +11,9 @@ public class MenuManagerPause : MenuEssentials
     public Sailboat boat;
     public Image blackout;
     public SailingCourse course;
-    public TextMeshPro CountdownTimer;
-    public TextMeshPro StandardTimer;
-    public TextMeshPro LapTimer;
+    public TextMeshProUGUI CountdownTimer;
+    public TextMeshProUGUI StandardTimer;
+    public TextMeshProUGUI LapTimer;
     public float fadeTime;
     public float practiceTime;
     private bool practice;
@@ -20,9 +22,13 @@ public class MenuManagerPause : MenuEssentials
 
     private float timerFrom;
 
-    public GameObject ControlTips;
+    public GameObject MainHUD;
     public GameObject PauseMenu;
     public GameObject ControlsScreen;
+
+    public Button ResetButton;
+    public Button SkipButton;
+    public Button ControlsButton;
 
     public GameObject[] SimpleTips;
     public GameObject[] ComplexTips;
@@ -38,6 +44,10 @@ public class MenuManagerPause : MenuEssentials
         StandardTimer.gameObject.SetActive(false);
         LapTimer.gameObject.SetActive(false);
         
+        PauseMenu.SetActive(false);
+        MainHUD.SetActive(true);
+        ControlsScreen.SetActive(false);
+        
         boat.freeplay = StudyManager._instance.freePlay;
         boat.controlsActive = false;
         simple = !boat.freeplay && // Default controls for free play are complex
@@ -48,8 +58,13 @@ public class MenuManagerPause : MenuEssentials
             go.SetActive(simple);
         foreach(GameObject go in ComplexTips)
             go.SetActive(!simple);
+        foreach(GameObject go in FreePlayTips)
+            go.SetActive(StudyManager._instance.freePlay);
         
         practice = StudyManager._instance.subStage == 1;
+        SkipButton.gameObject.SetActive(practice);
+        ResetButton.gameObject.SetActive(!practice);
+        
         StartCoroutine(FadeInOut(true, fadeTime));
     }
 
@@ -109,14 +124,14 @@ public class MenuManagerPause : MenuEssentials
     {
         boat.SendPracticeResults();
         StudyManager._instance.ReceivePracticeResults(pauses,controlChecks,practiceTime);
-        FadeInOut(false, 1f);
+        StartCoroutine(FadeInOut(false, 1f));
     }
     
     private void SendResults(float[] legTimes)
     {
         boat.SendResults();
         StudyManager._instance.ReceiveResults(pauses,controlChecks,legTimes);
-        FadeInOut(false, 1f);
+        StartCoroutine(FadeInOut(false, 1f));
     }
     
     // Update is called once per frame
@@ -148,12 +163,14 @@ public class MenuManagerPause : MenuEssentials
     {
         if (interactible)
         {
-            ControlTips.SetActive(!paused);
+            MainHUD.SetActive(!paused);
             Time.timeScale = paused ? 0f : 1f;
             PauseMenu.SetActive(paused);
             Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
             pauses += paused ? 1 : 0;
         }
+        if (paused)
+            OnControlsChanged();
     }
 
     public void ShowControls(bool shown)
@@ -161,6 +178,7 @@ public class MenuManagerPause : MenuEssentials
         PauseMenu.SetActive(!shown);
         ControlsScreen.SetActive(shown);
         controlChecks += shown ? 1 : 0;
+        OnControlsChanged();
     }
 
     public void EndPracticeEarly()
@@ -176,6 +194,18 @@ public class MenuManagerPause : MenuEssentials
 
     public void Reset()
     {       
-        //TODO 
+        if (!StudyManager._instance.freePlay)
+            StudyManager._instance.IncrementResets();
+        StudyManager.ChangeScene(3,true);
+    }
+
+    protected override void SelectDefaultMenuElement()
+    {
+        if (PauseMenu.activeSelf)
+            EventSystem.current.SetSelectedGameObject(firstSelected);
+        else
+            EventSystem.current.SetSelectedGameObject(ControlsButton.gameObject);
+
+            
     }
 }
