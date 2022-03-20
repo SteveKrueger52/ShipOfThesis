@@ -41,6 +41,7 @@ public class MenuManagerPause : MenuEssentials
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         CountdownTimer.gameObject.SetActive(false);
         StandardTimer.gameObject.SetActive(false);
         LapTimer.gameObject.SetActive(false);
@@ -118,7 +119,7 @@ public class MenuManagerPause : MenuEssentials
     {
         int m = Mathf.FloorToInt(seconds / 60f);
         float s = seconds - (60f * m);
-        return String.Format(m == 0 ? "" : "D:" + "F3", m,s);
+        return (m == 0 ? "" : (m + ":")) + $"{s:#0.000}";
     }
     
     private void SendPracticeResults()
@@ -141,6 +142,7 @@ public class MenuManagerPause : MenuEssentials
         if (interactible && !StudyManager.Instance.freePlay)
         {
             StandardTimer.text = Timestamp(practice ? (timerFrom + practiceTime) - Time.time : Time.time - timerFrom);
+            //Debug.Log(StandardTimer.text);
             if (practice && Time.time > timerFrom + practiceTime)
             {
                 SendPracticeResults();
@@ -155,6 +157,11 @@ public class MenuManagerPause : MenuEssentials
             foreach(GameObject go in ComplexTips)
                 go.SetActive(!simple);
         }
+    }
+
+    public void PauseToggle()
+    {
+        Pause(Mathf.Approximately(Time.timeScale, 1f));
     }
 
     public void Pause(bool paused)

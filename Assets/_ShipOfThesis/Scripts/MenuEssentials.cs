@@ -28,8 +28,6 @@ public abstract class MenuEssentials : MonoBehaviour
 
     public void OnControlsChanged()
     {
-        Cursor.visible = PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC;
-
         if (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC)
             EventSystem.current.SetSelectedGameObject(null);
         else 

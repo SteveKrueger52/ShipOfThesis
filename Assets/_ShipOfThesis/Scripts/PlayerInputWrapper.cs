@@ -55,6 +55,7 @@ public class PlayerInputWrapper : Singleton<PlayerInputWrapper>
     {
         _boat = FindObjectOfType<Sailboat>();
         _playerInput.camera = Camera.main;
+        Debug.Log(_boat);
     }
 
     public void SetControlComplexity(bool simple)
@@ -108,5 +109,10 @@ public class PlayerInputWrapper : Singleton<PlayerInputWrapper>
     {        
         if (_boat != null)
             _boat.GetComponent<SailboatCameraControls>().OnGetCameraY(value);
+    }
+
+    public void OnPause()
+    {
+        FindObjectOfType<MenuManagerPause>().PauseToggle();
     }
 }

@@ -17,7 +17,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     #region Public Members
 
     [HideInInspector] public bool freeplay;
-    [HideInInspector] public bool controlsActive;
+    public bool controlsActive;
     
     private bool simpleControls;
     public bool SimpleControls
@@ -107,6 +107,11 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
          currentWind = AverageWind();
      }
 
+     private void Start()
+     {
+         freeplay = StudyManager.Instance.freePlay;
+     }
+
      private void Update()
      {
          // Wind Particles
@@ -192,14 +197,14 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     public void EnterWind(WindZone wind)
     {
-        Debug.Log("Entered Wind");
+        //Debug.Log("Entered Wind");
         windZones.Add(wind);
         currentWind = AverageWind();
     }
 
     public void ExitWind(WindZone wind)
     {
-        Debug.Log("Left Wind");
+        //Debug.Log("Left Wind");
         windZones.Remove(wind);
         currentWind = AverageWind();
     }
@@ -257,6 +262,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         if (freeplay)
             SimpleControls = !simpleControls;
+        //Debug.Log("Toggled Controls");
     }
 
     #endregion

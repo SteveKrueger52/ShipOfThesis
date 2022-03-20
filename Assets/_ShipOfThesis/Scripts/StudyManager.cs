@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -87,7 +88,6 @@ public class StudyManager : Singleton<StudyManager>
                 ChangeScene(0);
                 break;
         }
-        SceneChanged?.Invoke();
     }
     
     public static void ChangeScene(int index, bool gameplay = false)
@@ -169,5 +169,20 @@ public class StudyManager : Singleton<StudyManager>
         stage = -1;
         subStage = -1;
         ChangeScene(0);
+    }
+
+    private void OnSceneChange(Scene oldScene, Scene newScene) 
+    {
+        SceneChanged?.Invoke();
+    }
+    
+    private void OnEnable()
+    {
+        SceneManager.activeSceneChanged += OnSceneChange;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.activeSceneChanged -= OnSceneChange;
     }
 }

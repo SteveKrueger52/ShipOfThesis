@@ -241,6 +241,17 @@
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49a6a426-0fc5-4aa3-9187-9d2643071a5f",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -599,6 +610,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Xbox",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e42fc8c1-e67e-4683-bd3f-1c2de7ecf0ce",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "MouseAndKey",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
