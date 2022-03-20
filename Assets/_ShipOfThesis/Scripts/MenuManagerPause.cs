@@ -155,9 +155,6 @@ public class MenuManagerPause : MenuEssentials
             foreach(GameObject go in ComplexTips)
                 go.SetActive(!simple);
         }
-
-        if (Mathf.Approximately(0f, Time.timeScale))
-            Cursor.visible = PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC;
     }
 
     public void Pause(bool paused)
@@ -168,6 +165,7 @@ public class MenuManagerPause : MenuEssentials
             Time.timeScale = paused ? 0f : 1f;
             PauseMenu.SetActive(paused);
             Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC;
             pauses += paused ? 1 : 0;
         }
         if (paused)

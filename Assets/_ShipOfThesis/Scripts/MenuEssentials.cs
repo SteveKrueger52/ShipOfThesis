@@ -17,20 +17,20 @@ public abstract class MenuEssentials : MonoBehaviour
     
     private void OnEnable()
     {
-        PlayerInputManager.Instance.ControlsChanged += OnControlsChanged;
+        PlayerInputWrapper.Instance.ControlsChanged += OnControlsChanged;
     
     }
     
     private void OnDisable()
     {
-        PlayerInputManager.Instance.ControlsChanged -= OnControlsChanged;
+        PlayerInputWrapper.Instance.ControlsChanged -= OnControlsChanged;
     }
 
     public void OnControlsChanged()
     {
-        Cursor.visible = PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC;
+        Cursor.visible = PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC;
 
-        if (PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC)
+        if (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC)
             EventSystem.current.SetSelectedGameObject(null);
         else 
             SelectDefaultMenuElement();

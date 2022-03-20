@@ -24,7 +24,7 @@ public class StudyManager : Singleton<StudyManager>
     private List<float> accuracyB; // No Accuracy Measurement on Simple Controls
     private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
-    private PlayerInputManager.ControllerEnum controllerA, controllerB;
+    private PlayerInputWrapper.ControllerEnum controllerA, controllerB;
 
     private InputDevice device;
 
@@ -93,7 +93,7 @@ public class StudyManager : Singleton<StudyManager>
     public static void ChangeScene(int index, bool gameplay = false)
     {
         Cursor.lockState = gameplay ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !gameplay && (PlayerInputManager.Instance.currentScheme == PlayerInputManager.ControllerEnum.PC);
+        Cursor.visible = !gameplay && (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC);
         Time.timeScale = gameplay ? 1f : 0f;
 
         SceneManager.LoadScene(index);

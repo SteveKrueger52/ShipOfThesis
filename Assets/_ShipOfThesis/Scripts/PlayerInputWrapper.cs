@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputManager : Singleton<PlayerInputManager>
+public class PlayerInputWrapper : Singleton<PlayerInputWrapper>
 {
     private PlayerInput _playerInput;
     private Sailboat _boat;
@@ -96,5 +96,17 @@ public class PlayerInputManager : Singleton<PlayerInputManager>
     {
         if (_boat != null)
             _boat.OnSwapControls();
+    }
+    
+    public void OnGetCameraX(InputValue value)
+    {
+        if (_boat != null)
+            _boat.GetComponent<SailboatCameraControls>().OnGetCameraX(value);
+    }
+    
+    public void OnGetCameraY(InputValue value)
+    {        
+        if (_boat != null)
+            _boat.GetComponent<SailboatCameraControls>().OnGetCameraY(value);
     }
 }

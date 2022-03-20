@@ -25,7 +25,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         get => simpleControls;
         set {
             simpleControls = value;
-            PlayerInputManager.Instance.SetControlComplexity(simpleControls);
+            PlayerInputWrapper.Instance.SetControlComplexity(simpleControls);
         }
     }
 
@@ -294,7 +294,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         sailAngleLocalMax = Mathf.Max(mainsailMinimum,OptimalSailAngle.Evaluate(windAngle / 180f));
 
         // Debug.Log(debug);
-        Debug.Log(halyardToggleUp + ": " + sailHeight + " | " + angleToTarget + " | " + steerTarget);
+        // Debug.Log(halyardToggleUp + ": " + sailHeight + " | " + angleToTarget + " | " + steerTarget);
     }
 
     private void ComplexSteering()

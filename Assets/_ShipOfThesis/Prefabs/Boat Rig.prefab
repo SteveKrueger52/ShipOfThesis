@@ -30,6 +30,36 @@ Transform:
   m_Father: {fileID: 1377106269}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1048013297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1048013298}
+  m_Layer: 0
+  m_Name: CamTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1048013298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048013297}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 826451872824901357}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1116941970
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,6 +200,7 @@ GameObject:
   - component: {fileID: 2066962263141538721}
   - component: {fileID: 309068537}
   - component: {fileID: 8385205356164624891}
+  - component: {fileID: 1393529520}
   m_Layer: 0
   m_Name: Boat Rig
   m_TagString: Untagged
@@ -195,6 +226,7 @@ Transform:
   - {fileID: 8406492534717359887}
   - {fileID: 8893924106222630138}
   - {fileID: 1377106269}
+  - {fileID: 1048013298}
   - {fileID: 2117403580887079791}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -569,6 +601,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1393529520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14624835638355031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f402546fda6ac6b47b953ed949f2e621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cm_FreeLook: {fileID: 0}
+  cm_FocusLeft: {fileID: 0}
+  cm_FocusRight: {fileID: 0}
 --- !u!1 &932980575937955712
 GameObject:
   m_ObjectHideFlags: 0
@@ -10151,7 +10198,7 @@ PrefabInstance:
     - target: {fileID: 8139476774283540142, guid: 82f64b10af1e184499f6c4a69581caf9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8139476774283540142, guid: 82f64b10af1e184499f6c4a69581caf9,
         type: 3}
