@@ -25,6 +25,13 @@ public abstract class MenuEssentials : MonoBehaviour
     {
         PlayerInputWrapper.Instance.ControlsChanged -= OnControlsChanged;
     }
+    
+    public static string Timestamp(float seconds)
+    {
+        int m = Mathf.FloorToInt(seconds / 60f);
+        float s = seconds - (60f * m);
+        return m == 0 ? $"{s:#0.000}" : m + ":" + $"{s:00.000}";
+    }
 
     public void OnControlsChanged()
     {

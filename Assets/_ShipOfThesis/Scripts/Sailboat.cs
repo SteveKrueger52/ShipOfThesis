@@ -245,7 +245,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         // Debug.Log("Move Rudder");
         if (controlsActive)
-            rudderInput = value.Get<float>();
+            rudderInput = -value.Get<float>();
         //Debug.Log("Rudder Input: " + rudderInput);
 
     }

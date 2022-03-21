@@ -18,6 +18,9 @@ public class SailingCourse : MonoBehaviour
     
     public delegate void CheckpointReached(float time);
     public event CheckpointReached CheckpointReachedEvent;
+    
+    public delegate void CheckpointCreated(Transform checkpoint);
+    public event CheckpointCreated CheckpointCreatedEvent;
 
     public void NextCheckpoint()
     {
@@ -28,12 +31,13 @@ public class SailingCourse : MonoBehaviour
         }
         _compareTime = Time.time;
         
-        if (_currentIdx > targets.Length)
+        if (_currentIdx >= targets.Length)
             CourseFinishedEvent?.Invoke(_legTimes);
         else
         {
             Transform nextCp = Instantiate(checkpointPrefab, targets[_currentIdx++], Quaternion.identity);
             nextCp.GetComponent<SailTarget>().CheckpointReached += NextCheckpoint;
+            CheckpointCreatedEvent?.Invoke(nextCp);
         }
     }
 }

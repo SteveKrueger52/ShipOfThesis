@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
+using Cinemachine.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,6 +40,8 @@ public class MenuManagerPause : MenuEssentials
     public GameObject[] SimpleTips;
     public GameObject[] ComplexTips;
     public GameObject[] FreePlayTips;
+    private Vector3 target;
+    public RectTransform targetPointer;
 
     private int pauses;
     private int controlChecks;
@@ -46,6 +49,7 @@ public class MenuManagerPause : MenuEssentials
     // Start is called before the first frame update
     void Start()
     {
+        targetPointer.gameObject.SetActive(false);
         Cursor.visible = false;
         CountdownTimer.gameObject.SetActive(false);
         StandardTimer.gameObject.SetActive(false);
@@ -80,11 +84,11 @@ public class MenuManagerPause : MenuEssentials
 
     private IEnumerator FadeInOut(bool fadeIn, float seconds)
     {
+        interactible = false;
         Time.timeScale = 1f;
         Debug.Log("Start Fade " + (fadeIn ? "In" : "Out"));
-        blackout.gameObject.SetActive(true);
-        interactible = false;
         blackout.color = new Color(0f,0f,0f,fadeIn ? 1f : 0f);
+        blackout.gameObject.SetActive(true);
         LeanTween.alpha((RectTransform) blackout.transform, fadeIn ? 0f : 1f, seconds);
         yield return new WaitForSeconds(seconds);
         blackout.gameObject.SetActive(false);
@@ -116,27 +120,27 @@ public class MenuManagerPause : MenuEssentials
         
         if (!practice)
         {
+            course.CheckpointCreatedEvent += UpdateTarget;
             course.CheckpointReachedEvent += x => StartCoroutine(DisplayLapTime(x));
             course.CourseFinishedEvent += SendResults;
             course.NextCheckpoint();
         }
     }
 
+    private void UpdateTarget(Transform checkpoint)
+    {
+        targetPointer.gameObject.SetActive(true);
+        target = checkpoint.position;
+    }
+
     private IEnumerator DisplayLapTime(float time)
     {
         LapTimer.gameObject.SetActive(true);
         LapTimer.text = Timestamp(time);
-        yield return new WaitUntil(() => Time.time > time + 3f);
+        yield return new WaitForSecondsRealtime(3f);
         LapTimer.gameObject.SetActive(false);
     }
 
-    private string Timestamp(float seconds)
-    {
-        int m = Mathf.FloorToInt(seconds / 60f);
-        float s = seconds - (60f * m);
-        return (m == 0 ? "" : (m + ":")) + $"{s:#0.000}";
-    }
-    
     private void SendPracticeResults()
     {
         boat.SendPracticeResults();
@@ -170,6 +174,7 @@ public class MenuManagerPause : MenuEssentials
             //Debug.Log(StandardTimer.text);
             if (practice && Time.time > timerFrom + practiceTime)
             {
+                StandardTimer.text = "Time Up!";
                 SendPracticeResults();
             }
         }
@@ -182,6 +187,14 @@ public class MenuManagerPause : MenuEssentials
             foreach(GameObject go in ComplexTips)
                 go.SetActive(!simple);
         }
+
+        if (target != Vector3.zero && Camera.main != null)
+        {
+            Vector3 flatCamFacing = Camera.main.transform.forward.ProjectOntoPlane(Vector3.up);
+            Vector3 flatTargetDir = (target - boat.transform.position).ProjectOntoPlane(Vector3.up);
+            targetPointer.rotation = Quaternion.Euler(0f,0f,Vector3.SignedAngle(flatTargetDir,flatCamFacing, Vector3.up));
+        }
+        
     }
 
     public void PauseToggle()
@@ -212,8 +225,7 @@ public class MenuManagerPause : MenuEssentials
             else
                 Cursor.visible = false;
         }
-        if (pauseFurther)
-            OnControlsChanged();
+        OnControlsChanged();
     }
 
     public void EndPracticeEarly()

@@ -17,7 +17,7 @@ public class ControlSchemeImageSwitcher : MonoBehaviour
     
     private void OnDisable()
     {
-        PlayerInputWrapper.Instance.ControlsChanged += ChangeImage;
+        PlayerInputWrapper.Instance.ControlsChanged -= ChangeImage;
         //Debug.Log("PrintOnDisable: script was disabled");
     }
 

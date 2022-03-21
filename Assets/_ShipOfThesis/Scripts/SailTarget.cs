@@ -10,7 +10,7 @@ public class SailTarget : MonoBehaviour
         if (other.gameObject.GetComponent<Sailboat>() != null)
         {
             CheckpointReached?.Invoke();
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }

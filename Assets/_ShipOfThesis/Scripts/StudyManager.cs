@@ -25,7 +25,9 @@ public class StudyManager : Singleton<StudyManager>
     private List<float> accuracyB; // No Accuracy Measurement on Simple Controls
     private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
-    private PlayerInputWrapper.ControllerEnum controllerA, controllerB;
+    
+    // TODO
+    private float[] controllerPercentsA, controllerPercentsB;
 
     private InputDevice device;
 
@@ -89,11 +91,42 @@ public class StudyManager : Singleton<StudyManager>
                 break;
         }
     }
+
+    public String[] GetResults(bool simple)
+    {
+        List<String> results = new List<string>();
+        results.Add(MenuEssentials.Timestamp(simple ? practiceTimeA : practiceTimeB));      // 0
+        results.Add(MenuEssentials.Timestamp((simple ? legTimesA : legTimesB)[0]));         // 1
+        results.Add(MenuEssentials.Timestamp((simple ? legTimesA : legTimesB)[1]));         // 2
+        results.Add(MenuEssentials.Timestamp((simple ? legTimesA : legTimesB)[2]));         // 3
+        results.Add(MenuEssentials.Timestamp((simple ? legTimesA : legTimesB)[3]));         // 4
+        
+        results.Add((simple ? pausesA1 : pausesB1).ToString());                             // 5
+        results.Add((simple ? pausesA2 : pausesB2).ToString());                             // 6
+        
+        results.Add((simple ? controlsA1 : controlsB1).ToString());                         // 9
+        results.Add((simple ? controlsA2 : controlsB2).ToString());                         // 10
+       
+        results.Add((simple ? crashesA1 : crashesB1).ToString());                           // 7
+        results.Add((simple ? crashesA2 : crashesB2).ToString());                           // 8
+
+        results.Add((simple ? controllerPercentsA : controllerPercentsB)[0].ToString());    // 11
+        results.Add((simple ? controllerPercentsA : controllerPercentsB)[1].ToString());    // 12
+        results.Add((simple ? controllerPercentsA : controllerPercentsB)[2].ToString());    // 13
+
+        if (!simple)
+            results.Add(accuracyB.ToString());                                              // 14
+        return results.ToArray();
+    }
     
     public static void ChangeScene(int index, bool gameplay = false)
     {
         Cursor.lockState = gameplay ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !gameplay && (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC);
+        if (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC)
+            Cursor.visible = !gameplay;
+        else
+            Cursor.visible = false;
+        
         Time.timeScale = gameplay ? 1f : 0f;
 
         SceneManager.LoadScene(index);
