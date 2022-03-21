@@ -15,11 +15,16 @@ public class MenuManagerPause : MenuEssentials
     public TextMeshProUGUI CountdownTimer;
     public TextMeshProUGUI StandardTimer;
     public TextMeshProUGUI LapTimer;
+
+    public GameObject SimpleControlDisplay;
+    public GameObject ComplexControlDisplay;
+    
     public float fadeTime;
     public float practiceTime;
     private bool practice;
     private bool interactible;
     private bool simple;
+    private int pauseState; // 0 - unpaused, 1 - paused, 2 - controls screen
 
     private float timerFrom;
 
@@ -56,6 +61,9 @@ public class MenuManagerPause : MenuEssentials
                               StudyManager.Instance.stage == (StudyManager.Instance.simpleFirst ?  1 : 2);
         boat.SimpleControls = simple;
         
+        SimpleControlDisplay.SetActive(simple);
+        ComplexControlDisplay.SetActive(!simple);
+        
         foreach(GameObject go in SimpleTips)
             go.SetActive(simple);
         foreach(GameObject go in ComplexTips)
@@ -72,15 +80,22 @@ public class MenuManagerPause : MenuEssentials
 
     private IEnumerator FadeInOut(bool fadeIn, float seconds)
     {
+        Time.timeScale = 1f;
+        Debug.Log("Start Fade " + (fadeIn ? "In" : "Out"));
+        blackout.gameObject.SetActive(true);
         interactible = false;
         blackout.color = new Color(0f,0f,0f,fadeIn ? 1f : 0f);
         LeanTween.alpha((RectTransform) blackout.transform, fadeIn ? 0f : 1f, seconds);
         yield return new WaitForSeconds(seconds);
-
+        blackout.gameObject.SetActive(false);
+        
         if (fadeIn)
             StartCoroutine(Countdown());
         else
+        {
+            Debug.Log("Moving On");
             StudyManager.Instance.Next();
+        }
     }
 
     private IEnumerator Countdown()
@@ -126,6 +141,11 @@ public class MenuManagerPause : MenuEssentials
     {
         boat.SendPracticeResults();
         StudyManager.Instance.ReceivePracticeResults(pauses,controlChecks,practiceTime);
+       
+        // Return to Base Pause State - Unpaused
+        Pause(false);
+        Pause(false);
+
         StartCoroutine(FadeInOut(false, fadeTime));
     }
     
@@ -133,6 +153,11 @@ public class MenuManagerPause : MenuEssentials
     {
         boat.SendResults();
         StudyManager.Instance.ReceiveResults(pauses,controlChecks,legTimes);
+        
+        // Return to Base Pause State - Unpaused
+        Pause(false);
+        Pause(false);
+
         StartCoroutine(FadeInOut(false, fadeTime));
     }
     
@@ -161,30 +186,34 @@ public class MenuManagerPause : MenuEssentials
 
     public void PauseToggle()
     {
-        Pause(Mathf.Approximately(Time.timeScale, 1f));
+        Pause(pauseState == 0);
     }
 
-    public void Pause(bool paused)
+    public void Pause(bool pauseFurther)
     {
+        pauseState += pauseFurther ? 1 : -1;
+        pauseState = pauseState < 0 ? 0 : pauseState;
+        
         if (interactible)
         {
-            MainHUD.SetActive(!paused);
-            Time.timeScale = paused ? 0f : 1f;
-            PauseMenu.SetActive(paused);
-            Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC;
-            pauses += paused ? 1 : 0;
-        }
-        if (paused)
-            OnControlsChanged();
-    }
+            MainHUD.SetActive(pauseState == 0);
+            Time.timeScale = pauseState == 0 ? 1f : 0f;
+            
+            PauseMenu.SetActive(pauseState == 1); 
+            pauses += pauseFurther ? 1 : 0;
 
-    public void ShowControls(bool shown)
-    {
-        PauseMenu.SetActive(!shown);
-        ControlsScreen.SetActive(shown);
-        controlChecks += shown ? 1 : 0;
-        OnControlsChanged();
+            ControlsScreen.SetActive(pauseState == 2);
+            controlChecks += pauseState == 2 ? 1 : 0;
+
+            
+            Cursor.lockState = pauseState > 0 ? CursorLockMode.None : CursorLockMode.Locked;
+            if (PlayerInputWrapper.Instance.currentScheme == PlayerInputWrapper.ControllerEnum.PC)
+                Cursor.visible = pauseState != 0;
+            else
+                Cursor.visible = false;
+        }
+        if (pauseFurther)
+            OnControlsChanged();
     }
 
     public void EndPracticeEarly()
@@ -207,11 +236,9 @@ public class MenuManagerPause : MenuEssentials
 
     protected override void SelectDefaultMenuElement()
     {
-        if (PauseMenu.activeSelf)
+        if (pauseState == 1)
             EventSystem.current.SetSelectedGameObject(firstSelected);
         else
             EventSystem.current.SetSelectedGameObject(ControlsButton.gameObject);
-
-            
     }
 }

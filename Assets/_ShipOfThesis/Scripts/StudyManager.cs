@@ -134,6 +134,7 @@ public class StudyManager : Singleton<StudyManager>
     
     public void ReceivePracticeResults(int pauses, int controlChecks, float practiceTime)
     {
+        Debug.Log("Received Practice results");
         if (isSimple())
         {
             pausesA1 += pauses;
@@ -150,6 +151,7 @@ public class StudyManager : Singleton<StudyManager>
     
     public void ReceiveResults(int pauses, int controlChecks, float[] legTimes)
     {
+        Debug.Log("Received Results");
         if (isSimple())
         {
             pausesA2 += pauses;
