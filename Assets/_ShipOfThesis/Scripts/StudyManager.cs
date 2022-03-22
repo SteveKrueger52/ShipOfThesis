@@ -27,7 +27,7 @@ public class StudyManager : Singleton<StudyManager>
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
     
     // TODO
-    private float[] controllerPercentsA, controllerPercentsB;
+    private float[] controllerPercentsA1, controllerPercentsB1, controllerPercentsA2, controllerPercentsB2;
 
     private InputDevice device;
 
@@ -104,18 +104,21 @@ public class StudyManager : Singleton<StudyManager>
         results.Add((simple ? pausesA1 : pausesB1).ToString());                             // 5
         results.Add((simple ? pausesA2 : pausesB2).ToString());                             // 6
         
-        results.Add((simple ? controlsA1 : controlsB1).ToString());                         // 9
-        results.Add((simple ? controlsA2 : controlsB2).ToString());                         // 10
+        results.Add((simple ? controlsA1 : controlsB1).ToString());                         // 7
+        results.Add((simple ? controlsA2 : controlsB2).ToString());                         // 8
        
-        results.Add((simple ? crashesA1 : crashesB1).ToString());                           // 7
-        results.Add((simple ? crashesA2 : crashesB2).ToString());                           // 8
+        results.Add((simple ? crashesA1 : crashesB1).ToString());                           // 9
+        results.Add((simple ? crashesA2 : crashesB2).ToString());                           // 10
 
-        results.Add((simple ? controllerPercentsA : controllerPercentsB)[0].ToString());    // 11
-        results.Add((simple ? controllerPercentsA : controllerPercentsB)[1].ToString());    // 12
-        results.Add((simple ? controllerPercentsA : controllerPercentsB)[2].ToString());    // 13
+        results.Add((simple ? controllerPercentsA1 : controllerPercentsB1)[0].ToString($"#0.00"));  // 11
+        results.Add((simple ? controllerPercentsA1 : controllerPercentsB1)[1].ToString($"#0.00"));  // 12
+        results.Add((simple ? controllerPercentsA1 : controllerPercentsB1)[2].ToString($"#0.00"));  // 13
+        results.Add((simple ? controllerPercentsA2 : controllerPercentsB2)[0].ToString($"#0.00"));  // 14
+        results.Add((simple ? controllerPercentsA2 : controllerPercentsB2)[1].ToString($"#0.00"));  // 15
+        results.Add((simple ? controllerPercentsA2 : controllerPercentsB2)[2].ToString($"#0.00"));  // 16
 
-        if (!simple)
-            results.Add(accuracyB.ToString());                                              // 14
+        results.Add(simple ? resetsA.ToString() : resetsB.ToString());
+        
         return results.ToArray();
     }
     
@@ -142,7 +145,12 @@ public class StudyManager : Singleton<StudyManager>
         else resetsB++;
     }
 
-    public void ReceivePracticeBoatResults(int crashes)
+    public float[] accuracy()
+    {
+        return accuracyB.ToArray();
+    }
+
+    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents)
     {
         if (isSimple())
             crashesA1 += crashes;
@@ -150,17 +158,15 @@ public class StudyManager : Singleton<StudyManager>
             crashesB1 += crashes;
     }
     
-    public void ReceiveBoatResults(int crashes, int resets, List<float> accuracy = null)
+    public void ReceiveBoatResults(int crashes, float[] controlPercents, List<float> accuracy = null)
     {
         if (isSimple())
         {
             crashesA2 += crashes;
-            resetsA += resets;
         }
         else
         {
             crashesB2 += crashes;
-            resetsB += resets;
             if (accuracy != null) accuracyB.AddRange(accuracy);
         }
     }

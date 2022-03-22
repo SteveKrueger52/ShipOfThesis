@@ -9,8 +9,8 @@ using Random = UnityEngine.Random;
 public class MenuManagerResults : MenuEssentials
 {
     private String validChars = "ABCDEFGHJKLMNPQRSTUVWXYZ1234567890";
-    public TextMeshProUGUI id, simpleText, complexText;
-    
+    public TextMeshProUGUI id, simpleText, complexText, copiedText;
+
     // Captured Data: 
     // System OS
     // Simple or Complex First
@@ -28,7 +28,10 @@ public class MenuManagerResults : MenuEssentials
     // Start is called before the first frame update
     void Start()
     {
-        
+        copiedText.gameObject.SetActive(false);
+        id.text = GetUniqueID();
+        simpleText.text = GetResults(true);
+        complexText.text = GetResults(false);
     }
 
     private String GetUniqueID()
@@ -53,17 +56,37 @@ public class MenuManagerResults : MenuEssentials
             String[] data = StudyManager.Instance.GetResults(simple);
 
             string acc = " Practice Time: " + String.Format($"{0,-10}", data[0]) + "\n" +
+                         "K/X/P: " + data[11] + "/" + data[12] + "/" + data[13] + "\n\n" +
                          "         Leg 1: " + String.Format($"{0,-10}", data[1]) + "\n" +
                          "         Leg 2: " + String.Format($"{0,-10}", data[2]) + "\n" +
                          "         Leg 3: " + String.Format($"{0,-10}", data[3]) + "\n" +
                          "         Leg 4: " + String.Format($"{0,-10}", data[4]) + "\n" +
-                         "        Pauses: " + String.Format($"{0,-10}", data[0]) + "\n" +
-                         "Control Checks: " + String.Format($"{0,-10}", data[0]) + "\n" +
-                         "       Crashes: " + String.Format($"{0,-10}", data[0]) + "\n";
-
-            return "";
+                         "    Total Time: " + String.Format($"{0,-10}", data[1] + data[2] + data[3] + data[4]) + "/n" +
+                         "K/X/P: " + data[14] + "/" + data[15] + "/" + data[16] + "\n\n" +
+                         "        Pauses: " + String.Format($"{0,-10}", data[5] + "/" + data[6]) + "\n" +
+                         "Control Checks: " + String.Format($"{0,-10}", data[7] + "/" + data[8]) + "\n" +
+                         "       Crashes: " + String.Format($"{0,-10}", data[9] + "/" + data[10]) + "\n" +
+                         "        Resets: " + String.Format($"{0,-10}", data[17]);
+            return acc;
     }
 
+    public void JSONtoClipboard()
+    {
+            GUIUtility.systemCopyBuffer = JsonUtility.ToJson(StudyManager.Instance.accuracy());
+            StartCoroutine(ShowCopiedText());
+    }
+
+    IEnumerator ShowCopiedText()
+    {
+            LeanTween.cancel(copiedText.gameObject);
+            copiedText.alpha = 1f;
+            copiedText.gameObject.SetActive(true);
+            yield return new WaitForSecondsRealtime(1f);
+            LeanTween.textAlpha((RectTransform) copiedText.transform, 0f, 2);
+            yield return new WaitForSecondsRealtime(2f);
+            copiedText.gameObject.SetActive(false);
+    }
+            
     protected override void SelectDefaultMenuElement()
     {
         EventSystem.current.SetSelectedGameObject(firstSelected);

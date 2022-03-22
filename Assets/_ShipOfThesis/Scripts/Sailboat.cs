@@ -92,7 +92,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private float rudderAngle;
     private float sailEffect;
     private float lastRudderAngle;
+    private float TimeSinceLastCrash;
+    private int crashes;
 
+    private List<float> accuracySnapshots;
+    public float timeBetweenSnapshots;
+    private float timeSinceLastSnapshot;
+
+    private float[] controlTimes;
+    
     #endregion
     
     
@@ -105,6 +113,8 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
          
          SimpleControls = false;
          currentWind = AverageWind();
+         controlTimes = new float[3];
+         accuracySnapshots = new List<float>();
      }
 
      private void Start()
@@ -133,6 +143,19 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
          // Update Animations
          UpdateAnimation();
+
+         switch (PlayerInputWrapper.Instance.currentScheme)
+         {
+             case PlayerInputWrapper.ControllerEnum.PC:
+                 controlTimes[0] += Time.deltaTime;
+                 break;
+             case PlayerInputWrapper.ControllerEnum.XBOX:
+                 controlTimes[1] += Time.deltaTime;
+                 break;
+             case PlayerInputWrapper.ControllerEnum.PS4:
+                 controlTimes[2] += Time.deltaTime;
+                 break;
+         }
      }
 
      // TODO collapse into readable helper functions
@@ -172,10 +195,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
        float effect = Mathf.Min(Mathf.Abs(degreesFromOptimal), Mathf.Abs(reflectedFromOptimal)) / 
            Mathf.Abs(Mathf.DeltaAngle(optimalAngle, Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f));
 
+       timeSinceLastSnapshot += Time.fixedDeltaTime;
+       if (Time.time - timeSinceLastSnapshot > timeBetweenSnapshots)
+       {
+           accuracySnapshots.Add(effect);
+           timeSinceLastSnapshot = Time.time;
+       }
+           
        sailEffect = SailAngleFalloff.Evaluate(effect) * frameSpeed * sailHeight;
-       
-       
-       
+
        // Capture old speed for momentum preservation
        Vector3 oldVel = rb.velocity.ProjectOntoPlane(Vector3.up);
        
@@ -400,12 +428,27 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     public void SendResults()
     {
-        //TODO 
+        float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
+        for (int i = 0; i < 3; i++)
+            controlTimes[i] /= (sum > 0 ? sum : 1);
+        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes);
     }
 
     public void SendPracticeResults()
     {
-        //TODO 
+        float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
+        for (int i = 0; i < 3; i++)
+            controlTimes[i] /= (sum > 0 ? sum : 1);
+        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes);
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Terrain" && Time.time - TimeSinceLastCrash > 5f)
+        {
+            TimeSinceLastCrash = Time.time;
+            crashes++;
+        }
     }
 
     #endregion
