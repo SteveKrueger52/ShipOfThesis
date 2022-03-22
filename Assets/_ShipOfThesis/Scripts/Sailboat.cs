@@ -273,7 +273,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         // Debug.Log("Move Rudder");
         if (controlsActive)
-            rudderInput = -value.Get<float>();
+            rudderInput = value.Get<float>();
         //Debug.Log("Rudder Input: " + rudderInput);
 
     }
@@ -431,7 +431,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
         for (int i = 0; i < 3; i++)
             controlTimes[i] /= (sum > 0 ? sum : 1);
-        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes);
+        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
     }
 
     public void SendPracticeResults()
@@ -439,6 +439,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
         for (int i = 0; i < 3; i++)
             controlTimes[i] /= (sum > 0 ? sum : 1);
+        Debug.Log(controlTimes);
         StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes);
     }
 

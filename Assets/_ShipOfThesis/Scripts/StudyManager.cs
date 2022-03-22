@@ -152,10 +152,17 @@ public class StudyManager : Singleton<StudyManager>
 
     public void ReceivePracticeBoatResults(int crashes, float[] controlPercents)
     {
+
         if (isSimple())
+        {
             crashesA1 += crashes;
+            controllerPercentsA1 = controlPercents;
+        }
         else
+        {            
             crashesB1 += crashes;
+            controllerPercentsB1 = controlPercents;
+        }
     }
     
     public void ReceiveBoatResults(int crashes, float[] controlPercents, List<float> accuracy = null)
@@ -163,10 +170,12 @@ public class StudyManager : Singleton<StudyManager>
         if (isSimple())
         {
             crashesA2 += crashes;
+            controllerPercentsA2 = controlPercents;
         }
         else
         {
-            crashesB2 += crashes;
+            crashesB2 += crashes; 
+            controllerPercentsB2 = controlPercents;
             if (accuracy != null) accuracyB.AddRange(accuracy);
         }
     }
