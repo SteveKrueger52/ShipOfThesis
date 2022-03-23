@@ -22,7 +22,7 @@ public class StudyManager : Singleton<StudyManager>
 
     private float[] legTimesA, legTimesB;
     private float practiceTimeA, practiceTimeB;
-    private List<float> accuracyB; // No Accuracy Measurement on Simple Controls
+    private List<Sailboat.Snapshot> accuracy; // No Accuracy Measurement on Simple Controls
     private int pausesA1, pausesA2, controlsA1, controlsA2, crashesA1, crashesA2, 
         pausesB1, pausesB2, controlsB1, controlsB2, crashesB1, crashesB2, resetsA, resetsB;
     
@@ -36,7 +36,7 @@ public class StudyManager : Singleton<StudyManager>
     protected override void OnAwake()
     {
         base.OnAwake();
-        accuracyB = new List<float>();
+        accuracy = new List<Sailboat.Snapshot>();
     }
     
     public void BeginStudy()
@@ -94,6 +94,7 @@ public class StudyManager : Singleton<StudyManager>
 
     public String[] GetResults(bool simple)
     {
+        studyComplete = true;
         List<String> results = new List<string>();
         results.Add(MenuEssentials.Timestamp(simple ? practiceTimeA : practiceTimeB));      // 0
         results.Add(MenuEssentials.Timestamp((simple ? legTimesA : legTimesB)[0]));         // 1
@@ -145,14 +146,15 @@ public class StudyManager : Singleton<StudyManager>
         else resetsB++;
     }
 
-    public float[] accuracy()
+    public Sailboat.Snapshot[] GetAccuracy()
     {
-        return accuracyB.ToArray();
+        return accuracy.ToArray();
     }
 
-    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents)
+    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents, List<Sailboat.Snapshot> accuracy = null)
     {
-
+        if (accuracy != null) this.accuracy.AddRange(accuracy);
+        
         if (isSimple())
         {
             crashesA1 += crashes;
@@ -165,8 +167,10 @@ public class StudyManager : Singleton<StudyManager>
         }
     }
     
-    public void ReceiveBoatResults(int crashes, float[] controlPercents, List<float> accuracy = null)
+    public void ReceiveBoatResults(int crashes, float[] controlPercents, List<Sailboat.Snapshot> accuracy = null)
     {
+        if (accuracy != null) this.accuracy.AddRange(accuracy);
+        
         if (isSimple())
         {
             crashesA2 += crashes;
@@ -176,7 +180,6 @@ public class StudyManager : Singleton<StudyManager>
         {
             crashesB2 += crashes; 
             controllerPercentsB2 = controlPercents;
-            if (accuracy != null) accuracyB.AddRange(accuracy);
         }
     }
     

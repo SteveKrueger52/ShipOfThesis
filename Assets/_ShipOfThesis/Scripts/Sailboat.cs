@@ -7,6 +7,23 @@ using UnityEngine.InputSystem;
 public class Sailboat : MonoBehaviour , WindZone.IWindObject
 {
     [Serializable]
+    public class Snapshot
+    {
+        public bool simple;
+        public bool practice;
+        public float timestamp;
+        public float accuracy;
+
+        public Snapshot(bool simple, bool practice, float timestamp, float accuracy)
+        {
+            this.simple = simple;
+            this.practice = practice;
+            this.timestamp = timestamp;
+            this.accuracy = accuracy;
+        }
+    }
+    
+    [Serializable]
     public class SeekEasingValues
     {
         public float MaxDelta;
@@ -18,7 +35,8 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     [HideInInspector] public bool freeplay;
     public bool controlsActive;
-    
+
+    public bool practice;
     private bool simpleControls;
     public bool SimpleControls
     {
@@ -72,6 +90,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     #region Private Members
 
+    private float startTime;
     private float mpsToKnots = 1.94384f; // Meters per second to knots
     private List<WindZone> windZones;
     private Vector3 currentWind;
@@ -95,7 +114,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     private float TimeSinceLastCrash;
     private int crashes;
 
-    private List<float> accuracySnapshots;
+    private List<Snapshot> accuracySnapshots;
     public float timeBetweenSnapshots;
     private float timeSinceLastSnapshot;
 
@@ -114,12 +133,13 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
          SimpleControls = false;
          currentWind = AverageWind();
          controlTimes = new float[3];
-         accuracySnapshots = new List<float>();
+         accuracySnapshots = new List<Snapshot>();
      }
 
      private void Start()
      {
          freeplay = StudyManager.Instance.freePlay;
+         startTime = Time.time;
      }
 
      private void Update()
@@ -198,7 +218,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
        timeSinceLastSnapshot += Time.fixedDeltaTime;
        if (Time.time - timeSinceLastSnapshot > timeBetweenSnapshots)
        {
-           accuracySnapshots.Add(effect);
+           accuracySnapshots.Add(new Snapshot(simpleControls, practice, Time.time - startTime, effect));
            timeSinceLastSnapshot = Time.time;
        }
            
@@ -273,7 +293,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
     {
         // Debug.Log("Move Rudder");
         if (controlsActive)
-            rudderInput = value.Get<float>();
+            rudderInput = -value.Get<float>();
         //Debug.Log("Rudder Input: " + rudderInput);
 
     }
@@ -428,19 +448,12 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     public void SendResults()
     {
-        float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
-        for (int i = 0; i < 3; i++)
-            controlTimes[i] /= (sum > 0 ? sum : 1);
         StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
     }
 
     public void SendPracticeResults()
     {
-        float sum = controlTimes[0] + controlTimes[1] + controlTimes[2];
-        for (int i = 0; i < 3; i++)
-            controlTimes[i] /= (sum > 0 ? sum : 1);
-        Debug.Log(controlTimes);
-        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes);
+        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
     }
 
     public void OnCollisionEnter(Collision collision)

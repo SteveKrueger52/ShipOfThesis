@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class MenuManagerResults : MenuEssentials
-{
+{ 
+    [Serializable]
+    class JSON_Out
+    {
+            public Sailboat.Snapshot[] data;
+    }
+    
     private String validChars = "ABCDEFGHJKLMNPQRSTUVWXYZ1234567890";
     public TextMeshProUGUI id, simpleText, complexText, copiedText;
 
@@ -54,25 +59,29 @@ public class MenuManagerResults : MenuEssentials
     private String GetResults(bool simple)
     {
             String[] data = StudyManager.Instance.GetResults(simple);
+            Debug.Log("Results Obtained: ");
+            Debug.Log(data);
 
-            string acc = " Practice Time: " + String.Format($"{0,-10}", data[0]) + "\n" +
+            string acc = " Practice Time: " + String.Format("{0,-10}", data[0]) + "\n" +
                          "K/X/P: " + data[11] + "/" + data[12] + "/" + data[13] + "\n\n" +
-                         "         Leg 1: " + String.Format($"{0,-10}", data[1]) + "\n" +
-                         "         Leg 2: " + String.Format($"{0,-10}", data[2]) + "\n" +
-                         "         Leg 3: " + String.Format($"{0,-10}", data[3]) + "\n" +
-                         "         Leg 4: " + String.Format($"{0,-10}", data[4]) + "\n" +
-                         "    Total Time: " + String.Format($"{0,-10}", data[1] + data[2] + data[3] + data[4]) + "/n" +
+                         "         Leg 1: " + String.Format("{0,-10}", data[1]) + "\n" +
+                         "         Leg 2: " + String.Format("{0,-10}", data[2]) + "\n" +
+                         "         Leg 3: " + String.Format("{0,-10}", data[3]) + "\n" +
+                         "         Leg 4: " + String.Format("{0,-10}", data[4]) + "\n" +
                          "K/X/P: " + data[14] + "/" + data[15] + "/" + data[16] + "\n\n" +
-                         "        Pauses: " + String.Format($"{0,-10}", data[5] + "/" + data[6]) + "\n" +
-                         "Control Checks: " + String.Format($"{0,-10}", data[7] + "/" + data[8]) + "\n" +
-                         "       Crashes: " + String.Format($"{0,-10}", data[9] + "/" + data[10]) + "\n" +
-                         "        Resets: " + String.Format($"{0,-10}", data[17]);
+                         "        Pauses: " + String.Format("{0,-10}", data[5] + "/" + data[6]) + "\n" +
+                         "Control Checks: " + String.Format("{0,-10}", data[7] + "/" + data[8]) + "\n" +
+                         "       Crashes: " + String.Format("{0,-10}", data[9] + "/" + data[10]) + "\n" +
+                         "        Resets: " + String.Format("{0,-10}", data[17]);
             return acc;
     }
 
     public void JSONtoClipboard()
     {
-            GUIUtility.systemCopyBuffer = JsonUtility.ToJson(StudyManager.Instance.accuracy());
+            JSON_Out json = new JSON_Out();
+            json.data = StudyManager.Instance.GetAccuracy();
+
+            GUIUtility.systemCopyBuffer = JsonUtility.ToJson(json);
             StartCoroutine(ShowCopiedText());
     }
 

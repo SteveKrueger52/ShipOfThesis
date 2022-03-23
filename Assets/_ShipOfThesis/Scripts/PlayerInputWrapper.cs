@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +12,7 @@ public class PlayerInputWrapper : Singleton<PlayerInputWrapper>
 
     public delegate void ControlsChangedHandler();
     public event ControlsChangedHandler ControlsChanged;
+
     
     protected override void OnAwake()
     {

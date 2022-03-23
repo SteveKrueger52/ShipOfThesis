@@ -1,11 +1,9 @@
-﻿using System;
+﻿
 using System.Collections;
-using System.Data;
 using Cinemachine.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MenuManagerPause : MenuEssentials
@@ -78,7 +76,8 @@ public class MenuManagerPause : MenuEssentials
         practice = StudyManager.Instance.subStage == 1;
         SkipButton.gameObject.SetActive(practice);
         ResetButton.gameObject.SetActive(!practice);
-        
+        boat.practice = practice;
+            
         StartCoroutine(FadeInOut(true, fadeTime));
     }
 
@@ -118,7 +117,7 @@ public class MenuManagerPause : MenuEssentials
         StandardTimer.gameObject.SetActive(!StudyManager.Instance.freePlay);
         timerFrom = Time.time;
         
-        if (!practice)
+        if (!practice && !StudyManager.Instance.freePlay)
         {
             course.CheckpointCreatedEvent += UpdateTarget;
             course.CheckpointReachedEvent += x => StartCoroutine(DisplayLapTime(x));
