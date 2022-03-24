@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2495,17 +2495,17 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   colorGradientTexture: {fileID: 0}
   shallowColor: {r: 0, g: 0.7725491, b: 0.62352943, a: 0.5019608}
-  deepColor: {r: 0.01176471, g: 0.28609294, b: 0.50980073, a: 1}
+  deepColor: {r: 0.01176471, g: 0.2860832, b: 0.50980073, a: 1}
   colorDepth: 0.8
-  horizonColor: {r: 0, g: 0.22726944, b: 0.8, a: 1}
+  horizonColor: {r: 0, g: 0.2272597, b: 0.8, a: 1}
   horizonDistance: 20
   shoreFade: 1
-  shoreColor: {r: 0, g: 0.98039216, b: 0.3017792, a: 0}
+  shoreColor: {r: 0, g: 0.98039216, b: 0.30176947, a: 0}
   shoreStrength: 0
   shoreBlend: 1
   shoreDepth: 0.74
   waveColor: {r: 0, g: 0, b: 0, a: 0}
-  underwaterColor: {r: 0.20374948, g: 0.30962232, b: 0.517647, a: 0}
+  underwaterColor: {r: 0.20374024, g: 0.30961257, b: 0.517647, a: 0}
   underwaterColorStrength: 0
   underwaterRefractionStrength: 0.099
   surfaceFoamTexture: {fileID: 2800000, guid: d3b0d77dfe711a04c8ff18ecc260aa66, type: 3}
@@ -24110,15 +24110,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas placerat
-    lacus eu risus accumsan, scelerisque cursus sapien malesuada. Nulla facilisi.
-    Morbi id justo nec ligula finibus venenatis at dapibus dolor. Praesent non lacinia
-    sapien. Cras sit amet justo ipsum. Donec interdum ac diam nec tempor. In dapibus
-    tincidunt massa, non ullamcorper metus. Proin quis facilisis ante, a viverra
-    libero. Cras rhoncus, leo nec viverra scelerisque, augue ipsum lobortis turpis,
-    et venenatis dui lectus congue nisl. In hac habitasse platea dictumst. Quisque
-    ultrices porta imperdiet. Morbi iaculis pretium metus id tempor. Nunc eu orci
-    sed lectus molestie suscipit. Quisque auctor enim sit amet sodales porttitor.
+  m_text: How does the complexity and granularity of a control system for a game
+    affect the user experience? For the core gameplay, it is often worth investing
+    time and resources to polish the game feel around the primary mechanics and how
+    the player interacts with them, but for many games, secondary mechanics such
+    as long-distance world traversal becomes an afterthought, implemented simply
+    and polished just enough to support the main gameplay. Here, I explore the idea
+    of implementing a more nuanced system for these secondary mechanics using a sailing
+    simulator, and analyze the cost and benefit of adding more nuanced and deep controls
+    for similar mechanics that - while not core to the gameplay - players will undoubtedly
+    still spend a large portion of their time performing, often repeatedly. Knowing
+    how few resources can be spent polishing secondary mechanics to maintain player
+    engagement will encourage more developers to include them in their games.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
