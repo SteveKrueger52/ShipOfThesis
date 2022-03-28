@@ -1306,8 +1306,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You will be tasked with sailing a boat around a predetermined island course.
     You will have up to 60 seconds to familiarize yourself with the controls, after
-    which you must complete the course as fast as possible. Press continue whenever
-    you are ready to begin.
+    which you must complete the course as fast as possible by sailing through the
+    blue checkpoints. Press continue whenever you are ready to begin.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

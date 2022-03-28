@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using Cinemachine.Utility;
 using TMPro;
@@ -225,6 +226,13 @@ public class MenuManagerPause : MenuEssentials
                 Cursor.visible = false;
         }
         OnControlsChanged();
+    }
+
+    public void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus) return;
+        pauseState = -1;
+        PauseToggle();
     }
 
     public void EndPracticeEarly()

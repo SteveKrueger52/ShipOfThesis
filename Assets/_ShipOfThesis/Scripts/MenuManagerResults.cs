@@ -80,7 +80,7 @@ public class MenuManagerResults : MenuEssentials
     {
             JSON_Out json = new JSON_Out();
             json.data = StudyManager.Instance.GetAccuracy();
-
+            
             GUIUtility.systemCopyBuffer = JsonUtility.ToJson(json);
             StartCoroutine(ShowCopiedText());
     }

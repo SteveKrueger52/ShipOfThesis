@@ -7,21 +7,21 @@ using UnityEngine.InputSystem;
 public class Sailboat : MonoBehaviour , WindZone.IWindObject
 {
     [Serializable]
-    public class Snapshot
-    {
-        public bool simple;
-        public bool practice;
-        public float timestamp;
-        public float accuracy;
-
-        public Snapshot(bool simple, bool practice, float timestamp, float accuracy)
-        {
-            this.simple = simple;
-            this.practice = practice;
-            this.timestamp = timestamp;
-            this.accuracy = accuracy;
-        }
-    }
+     public class Snapshot
+     {
+         public bool simple;
+         public bool practice;
+         public float timestamp;
+         public float accuracy;
+    
+         public Snapshot(bool simple, bool practice, float timestamp, float accuracy)
+         {
+             this.simple = simple;
+             this.practice = practice;
+             this.timestamp = timestamp;
+             this.accuracy = accuracy;
+         }
+     }
     
     [Serializable]
     public class SeekEasingValues
@@ -90,7 +90,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     #region Private Members
 
-    private float startTime;
+    private int startTime;
     private float mpsToKnots = 1.94384f; // Meters per second to knots
     private List<WindZone> windZones;
     private Vector3 currentWind;
@@ -133,13 +133,12 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
          SimpleControls = false;
          currentWind = AverageWind();
          controlTimes = new float[3];
-         accuracySnapshots = new List<Snapshot>();
+         // accuracySnapshots = new List<Snapshot>();
      }
 
      private void Start()
      {
          freeplay = StudyManager.Instance.freePlay;
-         startTime = Time.time;
      }
 
      private void Update()
@@ -212,13 +211,13 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
        float effectAngle = Mathf.Abs(degreesFromOptimal) < Mathf.Abs(reflectedFromOptimal) ? sailAngle * 90f : reflected;
        
        // Get T position of the sail (or its reflection) Lerping from the optimal angle to the wind axis.
-       float effect = Mathf.Min(Mathf.Abs(degreesFromOptimal), Mathf.Abs(reflectedFromOptimal)) / 
-           Mathf.Abs(Mathf.DeltaAngle(optimalAngle, Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f));
+       float effect = SafeDiv(Mathf.Min(Mathf.Abs(degreesFromOptimal), Mathf.Abs(reflectedFromOptimal)),
+           Mathf.Abs(Mathf.DeltaAngle(optimalAngle, Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f)));
 
        timeSinceLastSnapshot += Time.fixedDeltaTime;
        if (Time.time - timeSinceLastSnapshot > timeBetweenSnapshots)
        {
-           accuracySnapshots.Add(new Snapshot(simpleControls, practice, Time.time - startTime, effect));
+           accuracySnapshots.Add(new Snapshot(simpleControls, practice, startTime++, effect));
            timeSinceLastSnapshot = Time.time;
        }
            
@@ -408,10 +407,15 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         {
             //Debug.Log("Slow Down");
             effort *= (Mathf.Abs(delta) / outerThresh);
-            return origin + (toMove * (Mathf.Abs(delta) / outerThresh) * Time.deltaTime);
+            return origin + (toMove * SafeDiv(Mathf.Abs(delta), outerThresh) * Time.deltaTime);
         }
         effort = 0f;
         return target;
+    }
+
+    public float SafeDiv(float a, float b)
+    {
+        return b == 0f ? float.MaxValue * Mathf.Sign(a) : a / b;
     }
 
     private float InverseCurve(AnimationCurve curve, float target, int iterations = 10)
@@ -448,12 +452,12 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     public void SendResults()
     {
-        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
+        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes);
     }
 
     public void SendPracticeResults()
     {
-        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
+        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes);
     }
 
     public void OnCollisionEnter(Collision collision)

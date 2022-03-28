@@ -20,7 +20,7 @@ public class ControlSchemeImageSwitcher : MonoBehaviour
         //Debug.Log("PrintOnDisable: script was disabled");
     }
 
-    private void ChangeImage()
+    public void ChangeImage()
     {
         Keyboard.gameObject.SetActive(false);
         Xbox.gameObject.SetActive(false);

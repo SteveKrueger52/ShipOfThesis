@@ -33,11 +33,6 @@ public class StudyManager : Singleton<StudyManager>
 
     #endregion
 
-    protected override void OnAwake()
-    {
-        base.OnAwake();
-        accuracy = new List<Sailboat.Snapshot>();
-    }
     
     public void BeginStudy()
     {
@@ -151,7 +146,7 @@ public class StudyManager : Singleton<StudyManager>
         return accuracy.ToArray();
     }
 
-    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents, List<Sailboat.Snapshot> accuracy = null)
+    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents)
     {
         if (accuracy != null) this.accuracy.AddRange(accuracy);
         
@@ -167,7 +162,7 @@ public class StudyManager : Singleton<StudyManager>
         }
     }
     
-    public void ReceiveBoatResults(int crashes, float[] controlPercents, List<Sailboat.Snapshot> accuracy = null)
+    public void ReceiveBoatResults(int crashes, float[] controlPercents)
     {
         if (accuracy != null) this.accuracy.AddRange(accuracy);
         
