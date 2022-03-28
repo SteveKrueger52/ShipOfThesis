@@ -34,12 +34,15 @@ public class StudyManager : Singleton<StudyManager>
     #endregion
 
     
+    
+    
     public void BeginStudy()
     {
         stage = 0;
         subStage = 0;
         simpleFirst = Random.value > 0.5f;
         freePlay = false;
+        accuracy = new List<Sailboat.Snapshot>();
         
         //Reset Data Fields
         resetsA    = resetsB                              = 0;
@@ -146,9 +149,10 @@ public class StudyManager : Singleton<StudyManager>
         return accuracy.ToArray();
     }
 
-    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents)
+    public void ReceivePracticeBoatResults(int crashes, float[] controlPercents,
+        List<Sailboat.Snapshot> accuracySnapshots)
     {
-        if (accuracy != null) this.accuracy.AddRange(accuracy);
+        if (accuracySnapshots != null) this.accuracy.AddRange(accuracySnapshots);
         
         if (isSimple())
         {
@@ -162,9 +166,9 @@ public class StudyManager : Singleton<StudyManager>
         }
     }
     
-    public void ReceiveBoatResults(int crashes, float[] controlPercents)
+    public void ReceiveBoatResults(int crashes, float[] controlPercents, List<Sailboat.Snapshot> accuracySnapshots)
     {
-        if (accuracy != null) this.accuracy.AddRange(accuracy);
+        if (accuracySnapshots != null) this.accuracy.AddRange(accuracySnapshots);
         
         if (isSimple())
         {

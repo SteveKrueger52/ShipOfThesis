@@ -1,0 +1,20 @@
+diff a/Assets/_ShipOfThesis/Scripts/Sailboat.cs b/Assets/_ShipOfThesis/Scripts/Sailboat.cs	(rejected hunks)
+@@ -407,12 +407,17 @@
+         {
+             //Debug.Log("Slow Down");
+             effort *= (Mathf.Abs(delta) / outerThresh);
+-            return origin + (toMove * (Mathf.Abs(delta) / outerThresh) * Time.deltaTime);
++            return origin + (toMove * SafeDiv(Mathf.Abs(delta), outerThresh) * Time.deltaTime);
+         }
+         effort = 0f;
+         return target;
+     }
+ 
++    public float SafeDiv(float a, float b)
++    {
++        return b == 0f ? float.MaxValue * Mathf.Sign(a) : a / b;
++    }
++
+     private float InverseCurve(AnimationCurve curve, float target, int iterations = 10)
+     {
+         

@@ -133,7 +133,7 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
          SimpleControls = false;
          currentWind = AverageWind();
          controlTimes = new float[3];
-         // accuracySnapshots = new List<Snapshot>();
+         accuracySnapshots = new List<Snapshot>();
      }
 
      private void Start()
@@ -211,13 +211,13 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
        float effectAngle = Mathf.Abs(degreesFromOptimal) < Mathf.Abs(reflectedFromOptimal) ? sailAngle * 90f : reflected;
        
        // Get T position of the sail (or its reflection) Lerping from the optimal angle to the wind axis.
-       float effect = SafeDiv(Mathf.Min(Mathf.Abs(degreesFromOptimal), Mathf.Abs(reflectedFromOptimal)),
+       float effect = SafeDiv(Mathf.Min(Mathf.Abs(degreesFromOptimal), Mathf.Abs(reflectedFromOptimal)), 
            Mathf.Abs(Mathf.DeltaAngle(optimalAngle, Mathf.Abs(effectAngle) > Mathf.Abs(optimalAngle) ? windAngle : windAngle + 180f)));
 
        timeSinceLastSnapshot += Time.fixedDeltaTime;
        if (Time.time - timeSinceLastSnapshot > timeBetweenSnapshots)
        {
-           accuracySnapshots.Add(new Snapshot(simpleControls, practice, startTime++, effect));
+           accuracySnapshots.Add(new Snapshot(simpleControls, practice, Time.time - startTime, effect));
            timeSinceLastSnapshot = Time.time;
        }
            
@@ -238,7 +238,11 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
            rb.AddForce(-transform.right * rudderImpulse, ForceMode.Acceleration);
        lastRudderAngle = rudderAngle;
     }
-    
+
+    public float SafeDiv(float a, float b)
+    {
+        return b == 0f ? float.MaxValue * Mathf.Sign(a) : a / b;
+    }
 
     #region Interface Methods
 
@@ -407,15 +411,10 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
         {
             //Debug.Log("Slow Down");
             effort *= (Mathf.Abs(delta) / outerThresh);
-            return origin + (toMove * SafeDiv(Mathf.Abs(delta), outerThresh) * Time.deltaTime);
+            return origin + (toMove * SafeDiv(Mathf.Abs(delta) , outerThresh) * Time.deltaTime);
         }
         effort = 0f;
         return target;
-    }
-
-    public float SafeDiv(float a, float b)
-    {
-        return b == 0f ? float.MaxValue * Mathf.Sign(a) : a / b;
     }
 
     private float InverseCurve(AnimationCurve curve, float target, int iterations = 10)
@@ -452,12 +451,12 @@ public class Sailboat : MonoBehaviour , WindZone.IWindObject
 
     public void SendResults()
     {
-        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes);
+        StudyManager.Instance.ReceiveBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
     }
 
     public void SendPracticeResults()
     {
-        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes);
+        StudyManager.Instance.ReceivePracticeBoatResults(crashes,controlTimes,simpleControls ? null : accuracySnapshots);
     }
 
     public void OnCollisionEnter(Collision collision)
